@@ -21,11 +21,25 @@
  */
  
 /**
- * Here, we are connecting '/' (base path) to controller called 'Pages',
- * its action called 'display', and we pass a param to select the view file
- * to use (in this case, /app/View/Pages/home.ctp)...
+ * Here, we are connecting '/' (base path) to public posts index
  */
-	Router::connect('/', array('controller' => 'pages', 'action' => 'display', 'home'));
+	Router::connect('/', array('controller' => 'posts', 'action' => 'public_index'));
+
+/**
+ * Rotas específicas do blog
+ */
+	Router::connect('/blog', array('controller' => 'posts', 'action' => 'public_index'));
+	Router::connect('/dashboard', array('controller' => 'dashboard', 'action' => 'index'));
+	Router::connect('/admin', array('controller' => 'dashboard', 'action' => 'index'));
+	Router::connect('/admin/users', array('controller' => 'users', 'action' => 'index'));
+	
+	Router::connect('/login', array('controller' => 'users', 'action' => 'login'));
+	Router::connect('/logout', array('controller' => 'users', 'action' => 'logout'));
+	Router::connect('/register', array('controller' => 'users', 'action' => 'add'));
+	
+	Router::connect('/posts', array('controller' => 'posts', 'action' => 'index'));
+	Router::connect('/post/:id', array('controller' => 'posts', 'action' => 'view'), array('id' => '[0-9]+'));
+
 /**
  * ...and connect the rest of 'Pages' controller's URLs.
  */

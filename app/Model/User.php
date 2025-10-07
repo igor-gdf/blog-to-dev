@@ -11,26 +11,63 @@ class User extends AppModel
         'username' => array(
             'notBlank' => array(
                 'rule' => 'notBlank',
-                'message' => 'Username é obrigatório'
+                'message' => 'Username é obrigatório',
+                'allowEmpty' => false
+            ),
+            'minLength' => array(
+                'rule' => array('minLength', 3),
+                'message' => 'Username deve ter no mínimo 3 caracteres'
+            ),
+            'maxLength' => array(
+                'rule' => array('maxLength', 50),
+                'message' => 'Username deve ter no máximo 50 caracteres'
+            ),
+            'alphaNumeric' => array(
+                'rule' => 'alphaNumeric',
+                'message' => 'Username deve conter apenas letras e números'
             ),
             'isUnique' => array(
                 'rule' => 'isUnique',
                 'message' => 'Username já existe'
             )
         ),
+        'email' => array(
+            'notBlank' => array(
+                'rule' => 'notBlank',
+                'message' => 'Email é obrigatório',
+                'allowEmpty' => false
+            ),
+            'email' => array(
+                'rule' => 'email',
+                'message' => 'Email deve ter um formato válido'
+            ),
+            'maxLength' => array(
+                'rule' => array('maxLength', 100),
+                'message' => 'Email deve ter no máximo 100 caracteres'
+            ),
+            'isUnique' => array(
+                'rule' => 'isUnique',
+                'message' => 'Email já existe'
+            )
+        ),
         'password' => array(
             'notBlank' => array(
                 'rule' => 'notBlank',
-                'message' => 'Senha é obrigatória'
+                'message' => 'Senha é obrigatória',
+                'allowEmpty' => false,
+                'on' => 'create'
             ),
             'minLength' => array(
                 'rule' => array('minLength', 6),
-                'message' => 'Senha deve ter no mínimo 6 caracteres'
+                'message' => 'Senha deve ter no mínimo 6 caracteres',
+                'allowEmpty' => false,
+                'on' => 'create'
             )
         ),
         'role' => array(
-            'rule' => array('inList', array('admin', 'author')),
-            'message' => 'Role inválida'
+            'rule' => array('inList', array('admin', 'user')),
+            'message' => 'Role inválida. Deve ser admin ou user',
+            'allowEmpty' => false
         )
     );
 
@@ -45,6 +82,20 @@ class User extends AppModel
                 $this->data[$this->alias]['password']
             );
         }
+        
+        // Define role padrão como 'user' se não especificado
+        if (empty($this->data[$this->alias]['role'])) {
+            $this->data[$this->alias]['role'] = 'user';
+        }
+        
+        // Configurar timestamps manualmente para PostgreSQL
+        $now = date('Y-m-d H:i:s');
+        if (empty($this->id)) {
+            // Novo registro
+            $this->data[$this->alias]['created'] = $now;
+        }
+        $this->data[$this->alias]['modified'] = $now;
+        
         return true;
     }
 
@@ -55,5 +106,51 @@ class User extends AppModel
     {
         $user = $this->findById($userId);
         return $user && $user[$this->alias]['role'] === 'admin';
+    }
+
+    /**
+     * Formata data para padrão brasileiro
+     */
+    public function afterFind($results, $primary = false)
+    {
+        foreach ($results as &$result) {
+            if (isset($result[$this->alias]['created'])) {
+                $result[$this->alias]['created_br'] = date('d/m/Y H:i', strtotime($result[$this->alias]['created']));
+            }
+            if (isset($result[$this->alias]['modified'])) {
+                $result[$this->alias]['modified_br'] = date('d/m/Y H:i', strtotime($result[$this->alias]['modified']));
+            }
+        }
+        return $results;
+    }
+
+    /**
+     * Busca usuários com filtros
+     */
+    public function getFilteredUsers($filters = array(), $options = array())
+    {
+        $conditions = array();
+        
+        if (!empty($filters['search'])) {
+            $search = '%' . $filters['search'] . '%';
+            $conditions['OR'] = array(
+                $this->alias . '.username LIKE' => $search,
+                $this->alias . '.email LIKE' => $search
+            );
+        }
+        
+        if (!empty($filters['role'])) {
+            $conditions[$this->alias . '.role'] = $filters['role'];
+        }
+        
+        $defaults = array(
+            'conditions' => $conditions,
+            'fields' => array('id', 'username', 'email', 'role', 'created', 'modified'),
+            'order' => array($this->alias . '.created' => 'DESC')
+        );
+        
+        $options = array_merge($defaults, $options);
+        
+        return $this->find('all', $options);
     }
 }
