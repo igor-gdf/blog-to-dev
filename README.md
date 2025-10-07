@@ -1,12 +1,105 @@
-# CakePHP
+# Blog CakePHP 2.x
 
-[![Latest Stable Version](https://poser.pugx.org/cakephp/cakephp/v/stable.svg)](https://packagist.org/packages/cakephp/cakephp)
-[![License](https://poser.pugx.org/cakephp/cakephp/license.svg)](https://packagist.org/packages/cakephp/cakephp)
-[![Bake Status](https://secure.travis-ci.org/cakephp/cakephp.png?branch=master)](https://travis-ci.org/cakephp/cakephp)
-[![Code consistency](https://squizlabs.github.io/PHP_CodeSniffer/analysis/cakephp/cakephp/grade.svg)](https://squizlabs.github.io/PHP_CodeSniffer/analysis/cakephp/cakephp/)
+Sistema de blog desenvolvido em CakePHP 2.x com sistema de autenticação e controle de acesso.
 
-CakePHP is a rapid development framework for PHP which uses commonly known design patterns like Active Record, Association Data Mapping, Front Controller and MVC.
-Our primary goal is to provide a structured framework that enables PHP users at all levels to rapidly develop robust web applications, without any loss to flexibility.
+## 🚀 Funcionalidades
+
+- **Sistema de Posts**
+  - CRUD completo (Create, Read, Update, Delete)
+  - Status: rascunho, publicado, excluído
+  - Soft delete (exclusão lógica)
+  - Controle de acesso por usuário
+
+- **Sistema de Usuários**
+  - Autenticação (login/logout)
+  - Cadastro de novos usuários
+  - Controle de acesso baseado em roles (admin/user)
+  - Hash seguro de senhas
+
+- **Controle de Permissões**
+  - Admins podem ver e gerenciar todos os posts
+  - Usuários comuns só podem gerenciar seus próprios posts
+  - Listagem de usuários restrita para admins
+
+## 🛠️ Tecnologias
+
+- **PHP**: 5.6 (legado)
+- **Framework**: CakePHP 2.x
+- **Banco de Dados**: PostgreSQL 12
+- **Containerização**: Docker + Docker Compose
+- **Servidor Web**: Apache
+
+## 📦 Instalação com Docker
+
+1. Clone o repositório:
+```bash
+git clone https://github.com/igor-gdf/blog-to-dev.git
+cd blog-to-dev
+```
+
+2. Suba os containers:
+```bash
+docker-compose up -d
+```
+
+3. Acesse a aplicação:
+- **URL**: http://localhost:8080
+- **Banco de Dados**: localhost:5432
+
+## 🗄️ Configuração do Banco
+
+O projeto usa PostgreSQL com as seguintes configurações:
+- **Host**: db (dentro do Docker)
+- **Usuário**: bloguser
+- **Senha**: blogpassword
+- **Database**: blogdb
+
+## 📁 Estrutura do Projeto
+
+```
+app/
+├── Controller/          # Controllers da aplicação
+│   ├── PostsController.php
+│   └── UsersController.php
+├── Model/              # Models da aplicação
+│   ├── Post.php
+│   └── User.php
+├── View/               # Views da aplicação
+│   ├── Posts/
+│   │   ├── index.ctp
+│   │   ├── view.ctp
+│   │   └── add.ctp
+│   └── Users/
+│       ├── login.ctp
+│       └── add.ctp
+└── Config/             # Configurações
+    ├── database.php
+    ├── core.php
+    └── routes.php
+```
+
+## 🔧 Desenvolvimento
+
+### Executar comandos no container:
+```bash
+docker exec -it blog_cakephp_web bash
+```
+
+### Ver logs:
+```bash
+docker-compose logs -f
+```
+
+### Parar containers:
+```bash
+docker-compose down
+```
+
+## ⚠️ Notas Importantes
+
+- Este projeto usa tecnologias legadas (PHP 5.6, CakePHP 2.x)
+- Recomenda-se migração para versões mais recentes para produção
+- Debug está habilitado para desenvolvimento
 
 
 ## Some Handy Links

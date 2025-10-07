@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   db:
     image: postgres:12
@@ -12,7 +10,7 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
     ports:
-      - "5432:5432"
+      - "5433:5432"  # Mudando para porta 5433 para evitar conflito
 
   web:
     build:
@@ -21,7 +19,7 @@ services:
     container_name: blog_cakephp_web
     restart: always
     ports:
-      - "8080:80"
+      - "8081:80"  # Mudando para porta 8081
     volumes:
       - .:/var/www/html
     depends_on:
