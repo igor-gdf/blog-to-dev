@@ -102,6 +102,71 @@ class UsersController extends AppController
         $this->set('currentUser', $currentUser);
     }
 
+    public function view($id = null)
+    {
+        $currentUser = $this->Auth->user();
+        
+        // Se não passou ID, mostra o perfil do usuário logado
+        if (!$id) {
+            $id = $currentUser['id'];
+        }
+        
+        // Verificações de permissão
+        if ($currentUser['role'] !== 'admin' && $currentUser['id'] != $id) {
+            $this->Session->setFlash(
+                'Acesso negado. Você só pode visualizar seu próprio perfil.', 
+                'default', 
+                array('class' => 'alert alert-danger')
+            );
+            return $this->redirect('/');
+        }
+
+        $user = $this->User->findById($id);
+        if (!$user) {
+            throw new NotFoundException('Usuário não encontrado');
+        }
+
+        // Remove senha do array
+        unset($user['User']['password']);
+        
+        // Busca estatísticas do usuário (se existir a model Post)
+        if (App::uses('Post', 'Model')) {
+            App::import('Model', 'Post');
+            $postModel = new Post();
+            
+            $postStats = array(
+                'total' => $postModel->find('count', array(
+                    'conditions' => array('Post.user_id' => $id)
+                )),
+                'published' => $postModel->find('count', array(
+                    'conditions' => array(
+                        'Post.user_id' => $id,
+                        'Post.status' => 'published'
+                    )
+                )),
+                'draft' => $postModel->find('count', array(
+                    'conditions' => array(
+                        'Post.user_id' => $id,
+                        'Post.status' => 'draft'
+                    )
+                ))
+            );
+            
+            // Últimos posts do usuário
+            $recentPosts = $postModel->find('all', array(
+                'conditions' => array('Post.user_id' => $id),
+                'order' => array('Post.created' => 'DESC'),
+                'limit' => 5,
+                'fields' => array('Post.id', 'Post.title', 'Post.status', 'Post.created')
+            ));
+            
+            $this->set(compact('postStats', 'recentPosts'));
+        }
+        
+        $this->set(compact('user'));
+        $this->set('currentUser', $currentUser);
+    }
+
     public function add()
     {
         $currentUser = $this->Auth->user();

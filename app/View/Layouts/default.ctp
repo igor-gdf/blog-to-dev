@@ -118,7 +118,12 @@
                             </a>
                             <div class="dropdown-menu dropdown-menu-right">
                                 <?php echo $this->Html->link(
-                                    '<i class="fas fa-user-edit"></i> Meu Perfil', 
+                                    '<i class="fas fa-user"></i> Ver Perfil', 
+                                    array('controller' => 'users', 'action' => 'view', $loggedInUser['id']), 
+                                    array('class' => 'dropdown-item', 'escape' => false)
+                                ); ?>
+                                <?php echo $this->Html->link(
+                                    '<i class="fas fa-user-edit"></i> Editar Perfil', 
                                     array('controller' => 'users', 'action' => 'edit', $loggedInUser['id']), 
                                     array('class' => 'dropdown-item', 'escape' => false)
                                 ); ?>
