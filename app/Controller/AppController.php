@@ -30,5 +30,37 @@ App::uses('Controller', 'Controller');
  * @package		app.Controller
  * @link		https://book.cakephp.org/2.0/en/controllers.html#the-app-controller
  */
-class AppController extends Controller {
+class AppController extends Controller
+{
+    public $components = array(
+        'Session',
+        'Auth' => array(
+            'loginRedirect' => array('controller' => 'posts', 'action' => 'index', 'admin' => true),
+            'logoutRedirect' => array('controller' => 'posts', 'action' => 'index'),
+            'authenticate' => array(
+                'Form' => array(
+                    'passwordHasher' => 'Blowfish'
+                )
+
+            ),
+            'authorize' => array('Controller')
+        )
+    );
+        public function beforeFilter()
+    {
+        $this->Auth->allow('index', 'view');
+        $this->set('loggedIn', $this->Auth->user());
+    }
+    public function isAuthorized($user)
+    {
+        // Admin can access every action
+        if (isset($user['role']) && $user['role'] === 'admin') {
+            return true;
+        }
+
+        // Default deny
+        return false;
+    }
+
+
 }
