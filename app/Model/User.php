@@ -37,18 +37,26 @@ class User extends AppModel
     /**
      * Hash da senha antes de salvar
      */
-    public function beforeSave($options = array())
-    {
-        if (!empty($this->data[$this->alias]['password'])) {
+     public function beforeSave($options = array()) {
+        if (isset($this->data[$this->alias]['password'])) {
             $passwordHasher = new BlowfishPasswordHasher();
             $this->data[$this->alias]['password'] = $passwordHasher->hash(
                 $this->data[$this->alias]['password']
             );
         }
+        
+        // Lógica de segurança para o perfil de admin
+        if (isset($this->id) &&!empty($this->data[$this->alias]['role'])) {
+            $currentUser = $this->findById($this->id);
+            if ($currentUser['User']['role'] === 'admin' && $this->data[$this->alias]['role']!== 'admin') {
+                // Impede que um admin seja rebaixado
+                return false; 
+            }
+        }
+        
         return true;
     }
-
-    /**
+     /**
      * Método para verificar role
      */
     public function isAdmin($userId)
