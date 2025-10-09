@@ -1,0 +1,31 @@
+/* Garante altura total */
+html, body {
+    height: 100%;
+}
+
+.container-fluid {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+/* Faz a row expandir e ocupar o restante da tela */
+.row.g-0 {
+    flex: 1;
+    display: flex;
+}
+
+/* Sidebar fixa na esquerda */
+#sidebar {
+    min-height: 100%;
+    height: auto;
+    background: #212529;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Conteúdo principal cresce automaticamente */
+main {
+    flex: 1;
+    overflow-y: auto;
+}
