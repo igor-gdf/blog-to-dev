@@ -35,8 +35,8 @@ class AppController extends Controller
     public $components = array(
         'Session',
         'Auth' => array(
-            'loginRedirect' => array('controller' => 'posts', 'action' => 'index', 'admin' => true),
-            'logoutRedirect' => array('controller' => 'posts', 'action' => 'index'),
+            'loginRedirect' => array('controller' => 'posts', 'action' => 'index'),
+            'logoutRedirect' => array('controller' => 'users', 'action' => 'login'),
             'authenticate' => array(
                 'Form' => array(
                     'passwordHasher' => 'Blowfish'

@@ -27,19 +27,36 @@ class UsersController extends AppController
         }
     }
     public function login(){
+        // Forçar logout se já estiver logado
+        if ($this->Auth->loggedIn()) {
+            $this->Auth->logout();
+        }
+        
         if ($this->request->is('post')) {
             if ($this->Auth->login()) {
-                $this->Session->setFlash(__('Você logou com sucesso.'), 'default', array('class' => 'alert alert-success'));
-                return $this->redirect($this->Auth->redirectUrl());
+                $this->Session->setFlash(__('Login realizado com sucesso.'), 'default', array('class' => 'alert alert-success'));
+                return $this->redirect($this->Auth->redirectUrl(array('controller' => 'posts', 'action' => 'index')));
+                
+            } else {
+                $this->Session->setFlash(__('Usuário ou senha inválidos.'), 'default', array('class' => 'alert alert-danger'));
             }
-            $this->Session->setFlash(__('Usuário ou senha inválidos, tente novamente'), 'default', array('class' => 'alert alert-danger'));
         }
     }
     public function editProfile( ) {
 
     }
-    public function profile(){
+    public function profile($id = null){
+        $currentUser = $this->Auth->user();
 
+        if ($id === null) {
+            $id = $currentUser['id'];
+        }
+
+        $user = $this->User->findById($id);
+        if (!$user) {
+            throw new NotFoundException(__('Usuário não encontrado'));
+        }
+        $this->set('user', $user);
     }
     public function delete(){
 
