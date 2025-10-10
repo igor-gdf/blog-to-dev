@@ -31,10 +31,8 @@
                     </div>
 
                     <div class="d-grid">
-                        <?php echo $this->Form->end(array(
-                            'label' => 'Entrar',
-                            'class' => 'btn btn-primary btn-lg'
-                        )); ?>
+                        <?php echo $this->Form->submit(__('Entrar'), array('class' => 'btn bg-black text-white btn-lg')); ?>
+                        <?php echo $this->Form->end(); ?>
                     </div>
                 </div>
                 <div class="card-footer text-center d-flex flex-column gap-2">

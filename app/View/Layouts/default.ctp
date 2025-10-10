@@ -42,5 +42,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 			<?php echo $this->fetch('content'); ?>
 		</div>
 	</div>
+	<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.4/dist/jquery.min.js"></script>
+	<script src="/js/flash.js" defer></script>
 </body>
 </html>

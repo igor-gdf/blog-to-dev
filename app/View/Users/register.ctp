@@ -3,7 +3,7 @@
         <div class="col-md-6">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="text-center">Login</h4>
+                    <h4 class="text-center">Registro</h4>
                 </div>
                 <div class="card-body">
                     <?php echo $this->Session->flash(); ?>
@@ -39,16 +39,14 @@
                     </div>
 
                     <div class="d-grid">
-                        <?php echo $this->Form->end(__('Registrar'), array(
-                        'label' => 'Registrar', 
-                        'class' => 'btn btn-primary btn-lg'
-                        )); ?>
+                        <?php echo $this->Form->submit(__('Registrar'), array('class' => 'btn bg-black text-white btn-lg')); ?>
+                        <?php echo $this->Form->end(); ?>
                     </div>
                 </div>
                 <div class="card-footer text-center">
                     <small>
-                        Não tem conta?
-                        <?php echo $this->Html->link('Registre-se', array('action' => 'register', ), array('class' => 'text-decoration-none')); ?>
+                        Já tem conta?
+                        <?php echo $this->Html->link('Faça login', array('action' => 'login'), array('class' => 'text-decoration-none')); ?>
                     </small>
                 </div>
             </div>
