@@ -1,72 +1,32 @@
-<div class="container-fluid p-0 min-vh-100">
-    <!-- Navbar -->
-    <nav class="navbar bg-black border-bottom border-dark p-4">
-        <?php echo $this->Session->flash(); ?>
-        <div>
-            <?php echo $this->Html->link(
-                $this->Html->image('logo.svg', array('alt' => 'Logo')),
-                array('controller' => 'posts', 'action' => 'index'),
-                array('class' => 'navbar-brand', 'escape' => false)
-            ); ?>
-        </div>
-    </nav>
+<?= $this->Html->link('Novo Post', ['controller' => 'posts', 'action' => 'add'], ['class' => 'btn btn-zzz mb-3']) ?>
 
-    <div class="row g-0">
-        <!-- Sidebar -->
-        <nav id="sidebar" class="d-flex justify-content-between flex-column col-md-3 col-lg-2 bg-black sidebar border-end border-dark">
-            <div class="position-sticky pt-3">
-                <ul class="nav flex-column">
-                    <li class="nav-item">
-                        <?php echo $this->Html->link(
-                            '<i class="fas fa-home text-white"></i><span class="sidebar-text text-white ms-2">Home</span>',
-                            array('controller' => 'posts', 'action' => 'index'),
-                            array('class' => 'nav-link', 'escape' => false)
-                        ); ?>
-                    </li>
-                    <li class="nav-item">
-                        <?php echo $this->Html->link(
-                            '<i class="fas fa-users text-white"></i><span class="sidebar-text text-white ms-2">Dashboard</span>',
-                            array('controller' => 'users', 'action' => 'index'),
-                            array('class' => 'nav-link', 'escape' => false)
-                        ); ?>
-                    </li>
-                    <li class="nav-item">
-                        <?php echo $this->Html->link(
-                            '<i class="fas fa-cog text-white"></i><span class="sidebar-text text-white ms-2">Sobre o dev</span>',
-                            '#',
-                            array('class' => 'nav-link', 'escape' => false)
-                        ); ?>
-                    </li>
-                </ul>
-            </div>
-            
-            <div class="position-sticky pb-3">
-                <ul class="nav flex-column">
-                    <li class="nav-item">
-                        <?php echo $this->Html->link(
-                            '<i class="fas fa-home text-danger"></i><span class="sidebar-text text-danger ms-2">Logout</span>',
-                            array('controller' => 'users', 'action' => 'logout'),
-                            array('class' => 'nav-link', 'escape' => false)
-                        ); ?>
-                    </li>
-                    <li class="nav-item text-center">
-                        <small>
-                            copyright©blogtodev-2025
-                        </small>
-                    </li>
-                </ul>
-            </div>
-        </nav>
+<?php if (!empty($posts)) : ?>
+    <div class="d-flex align-items-center justify-content-between mb-3">
+        <h1 class="h3 mb-0">Posts</h1>
+    </div>
 
-        <main class="col-md-9 col-lg-10 bg-light">
-            <div class="p-4">
-                <div class="row">
-                    <div class="col-12">
-                        <p>Conteúdo principal aqui...</p>
-
+    <div class="overflow-auto row g-3" style="max-height: 55vh;">
+        <?php foreach ($posts as $post) : ?>
+            <div class="col-12 col-sm-6 col-md-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title mb-2">
+                            <?= $this->Html->link(h($post['Post']['title']), ['controller' => 'posts', 'action' => 'view', $post['Post']['id']], ['escape' => false, 'class' => 'stretched-link text-decoration-none']) ?>
+                        </h5>
+                        <p class="card-text text-truncate mb-3" style="--bs-line-clamp:3; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden;">
+                            <?= h($post['Post']['content']) ?>
+                        </p>
+                        <div class="mt-auto">
+                            <small class="text-muted">Autor: <?= h($post['User']['username']) ?></small>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-transparent border-0 pt-0">
+                        <small class="text-muted"><?= h($post['Post']['created']) ?></small>
                     </div>
                 </div>
             </div>
-        </main>
+        <?php endforeach; ?>
     </div>
-</div>
+<?php else : ?>
+    <p>Nenhum post encontrado.</p>
+<?php endif; ?>

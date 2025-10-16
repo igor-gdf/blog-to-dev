@@ -39,15 +39,36 @@ class Post extends AppModel
      */
     public function beforeSave($options = array())
     {
-        // Padroniza título
-        if (isset($this->data[$this->alias]['title'])) {
+        // formata título se enviado
+        if (!empty($this->data[$this->alias]['title'])) {
             $this->data[$this->alias]['title'] = ucwords(strtolower($this->data[$this->alias]['title']));
         }
 
-        // Status padrão
+        // valor padrão para status
         if (empty($this->data[$this->alias]['status'])) {
             $this->data[$this->alias]['status'] = 'draft';
         }
+
+        // Remove literais indesejadas que causam erro no Postgres
+        foreach (array('created', 'modified') as $tsField) {
+            if (isset($this->data[$this->alias][$tsField])) {
+                $val = $this->data[$this->alias][$tsField];
+                if ($val === 'CURRENT_TIMESTAMP' || $val === 'current_timestamp' || $val === '') {
+                    unset($this->data[$this->alias][$tsField]);
+                }
+            }
+        }
+
+        // Define timestamps em PHP para evitar problemas com expressões SQL em inserts
+        $now = date('Y-m-d H:i:s');
+
+        // se for insert e created não foi enviado, define created
+        if (empty($this->data[$this->alias]['id']) && empty($this->data[$this->alias]['created'])) {
+            $this->data[$this->alias]['created'] = $now;
+        }
+
+        // sempre atualiza modified
+        $this->data[$this->alias]['modified'] = $now;
 
         return true;
     }
