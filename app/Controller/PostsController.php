@@ -30,4 +30,13 @@ class PostsController extends AppController
             }
         }
     }
+
+    public function view($id = null) {
+        if (!$id || !$this->Post->exists($id)) {
+            throw new NotFoundException(__('Post inválido.'));
+        }
+
+        $post = $this->Post->findById($id);
+        $this->set('post', $post);
+    }
 }

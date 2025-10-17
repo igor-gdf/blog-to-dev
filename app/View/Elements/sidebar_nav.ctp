@@ -21,7 +21,7 @@
                         <?php echo $this->Html->link($this->Html->image('home.svg', ['alt' => 'Home', 'class' => 'me-2 mb-1']) . 'Home', array('controller' => 'posts', 'action' => 'index'), array('class' => 'nav-link d-inline-flex align-items-center text-white', 'escape' => false)); ?>
                     </li>
                     <li class="nav-item">
-                        <?php echo $this->Html->link($this->Html->image('dashboard.svg', ['alt' => 'Dashboard', 'class' => 'me-2 mb-1']) . 'Dashboard', array('controller' => 'posts', 'action' => 'index'), array('class' => 'nav-link d-inline-flex align-items-center text-white', 'escape' => false)); ?>
+                        <?php echo $this->Html->link($this->Html->image('dashboard.svg', ['alt' => 'Dashboard', 'class' => 'me-2 mb-1']) . 'Dashboard', array('controller' => 'posts', 'action' => 'dashboard'), array('class' => 'nav-link d-inline-flex align-items-center text-white', 'escape' => false)); ?>
                     </li>
                 </ul>
             </div>

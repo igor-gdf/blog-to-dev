@@ -1,4 +1,4 @@
-<?= $this->Html->link('Novo Post', ['controller' => 'posts', 'action' => 'add'], ['class' => 'btn btn-zzz mb-3']) ?>
+<?= $this->Html->link($this->Html->image('send-m.svg', ['alt' => 'Novo Post', 'class' => 'me-2']) . 'Adicionar novo post', ['controller' => 'posts', 'action' => 'add'], ['class' => 'btn border-black mb-3', 'escape' => false]) ?>
 
 <?php if (!empty($posts)) : ?>
     <div class="d-flex align-items-center justify-content-between mb-3">
@@ -11,7 +11,7 @@
                 <div class="card h-100 shadow-sm">
                     <div class="card-body d-flex flex-column">
                         <h5 class="card-title mb-2">
-                            <?= $this->Html->link(h($post['Post']['title']), ['controller' => 'posts', 'action' => 'view', $post['Post']['id']], ['escape' => false, 'class' => 'stretched-link text-decoration-none']) ?>
+                            <?= $this->Html->link(h($post['Post']['title']), ['controller' => 'posts', 'action' => 'view', $post['Post']['id']], ['escape' => false, 'class' => 'text-black stretched-link text-decoration-none']) ?>
                         </h5>
                         <p class="card-text text-truncate mb-3" style="--bs-line-clamp:3; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden;">
                             <?= h($post['Post']['content']) ?>
