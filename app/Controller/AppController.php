@@ -4,6 +4,7 @@ App::uses('Controller', 'Controller');
 class AppController extends Controller
 {
     public $components = array(
+        'Paginator',
         'Session',
         'Flash',
         'Auth' => array(

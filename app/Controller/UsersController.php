@@ -46,12 +46,7 @@ class UsersController extends AppController
                 $this->Flash->success(
                     __('Login realizado com sucesso.')
                 );
-
                 $redirectUrl = $this->Auth->redirectUrl();
-                if (empty($redirectUrl) || strpos($redirectUrl, '/users/login') !== false) {
-                    $redirectUrl = array('controller' => 'posts', 'action' => 'index');
-                }
-
                 return $this->redirect($redirectUrl);
             } else {
                 $this->Flash->error(
