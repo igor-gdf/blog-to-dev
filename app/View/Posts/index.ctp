@@ -1,3 +1,20 @@
+<div class="search-form">
+    <?php
+    echo $this->Form->create('Post', array('type' => 'get', 'class' => 'd-flex mb-3 gap-3', 'url' => array('action' => 'index')));
+    
+    echo $this->Form->input('search', array(
+        'label' => false,
+        'div' => false,
+        'class' => 'form-control',
+        'placeholder' => 'Buscar...',
+        'value' => isset($this->request->query['search']) ? $this->request->query['search'] : ''
+    ));
+
+    echo $this->Form->submit('Pesquisar', array('class' => 'btn border-black'));
+    echo $this->Form->end();
+    ?>
+</div>
+
 <?= $this->Html->link($this->Html->image('send-m.svg', ['alt' => 'Novo Post', 'class' => 'me-2']) . 'Adicionar novo post', ['controller' => 'posts', 'action' => 'add'], ['class' => 'btn border-black mb-3', 'escape' => false]) ?>
 
 <?php if (!empty($posts)) : ?>
@@ -10,7 +27,7 @@
             <div class="col-12 col-sm-6 col-md-4">
                 <div class="card h-100 shadow-sm">
                     <div class="card-body d-flex flex-column">
-                        <h5 class="card-title mb-2">
+                        <h5 class="card-title text-truncate mb-2">
                             <?= $this->Html->link(h($post['Post']['title']), ['controller' => 'posts', 'action' => 'view', $post['Post']['id']], ['escape' => false, 'class' => 'text-black stretched-link text-decoration-none']) ?>
                         </h5>
                         <p class="card-text text-truncate mb-3" style="--bs-line-clamp:3; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden;">

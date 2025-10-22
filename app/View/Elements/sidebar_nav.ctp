@@ -23,6 +23,9 @@
                     <li class="nav-item">
                         <?php echo $this->Html->link($this->Html->image('dashboard.svg', ['alt' => 'Dashboard', 'class' => 'me-2 mb-1']) . 'Dashboard', array('controller' => 'posts', 'action' => 'dashboard'), array('class' => 'nav-link d-inline-flex align-items-center text-white', 'escape' => false)); ?>
                     </li>
+                    <li class="nav-item">
+                        <?php echo $this->Html->link($this->Html->image('perfil.svg', ['alt' => 'Perfil', 'class' => 'me-2 mb-1']) . 'Perfil', array('controller' => 'users', 'action' => 'profile'), array('class' => 'nav-link d-inline-flex align-items-center text-white', 'escape' => false)); ?>
+                    </li>
                 </ul>
             </div>
 
@@ -30,12 +33,18 @@
                 <ul class="nav flex-column">
                     <?php if ($loggedIn): ?>
                         <li class="nav-item">
-                            <?= $this->Html->link($this->Html->image('logout.svg', ['alt' => 'Logout', 'class' => 'me-2']) . 'Logout', array('controller' => 'users', 'action' => 'logout'), array('class' => 'nav-link d-inline-flex align-items-center text-danger', 'escape' => false)
+                            <?= $this->Html->link(
+                                $this->Html->image('logout.svg', ['alt' => 'Logout', 'class' => 'me-2']) . 'Logout',
+                                array('controller' => 'users', 'action' => 'logout'),
+                                array('class' => 'nav-link d-inline-flex align-items-center text-danger', 'escape' => false)
                             ) ?>
                         </li>
                     <?php else: ?>
                         <li class="nav-item">
-                            <?= $this->Html->link($this->Html->image('login.svg', ['alt' => 'Login', 'class' => 'me-2']) . 'Login', array('controller' => 'users', 'action' => 'login'), array('class' => 'nav-link d-inline-flex align-items-center  text-success', 'escape' => false)
+                            <?= $this->Html->link(
+                                $this->Html->image('login.svg', ['alt' => 'Login', 'class' => 'me-2']) . 'Login',
+                                array('controller' => 'users', 'action' => 'login'),
+                                array('class' => 'nav-link d-inline-flex align-items-center  text-success', 'escape' => false)
                             ) ?>
                         </li>
                     <?php endif; ?>
