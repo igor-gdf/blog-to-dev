@@ -76,10 +76,11 @@ class UsersController extends AppController
         return $this->redirect($this->Auth->logout());
     }
 
-    // ÁREA ADMIN
-    public function admin_index() {}
+
+/*  public function admin_index() {}
     public function admin_view() {}
     public function admin_add() {}
     public function admin_edit() {}
     public function admin_delete() {}
+*/
 }
