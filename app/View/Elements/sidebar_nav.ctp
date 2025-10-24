@@ -1,4 +1,10 @@
 <div class="container-fluid p-0 min-vh-100">
+    <?php
+    // evita erro quando usuário não estiver logado
+    $username = $this->Session->read('Auth.User.username');
+    $role = $this->Session->read('Auth.User.role');
+    $loggedIn = !empty($username);
+    ?>
     <!-- Navbar -->
     <nav class="navbar bg-black border-bottom border-dark p-4">
         <?php echo $this->Session->flash(); ?>
@@ -8,6 +14,17 @@
                 array('controller' => 'posts', 'action' => 'index'),
                 array('class' => 'navbar-brand', 'escape' => false)
             ); ?>
+        </div>
+        <div class="d-flex">
+            <!--<?= $this->Html->image('user.png', array('alt' => 'User Icon', 'class' => 'me-2')); ?>-->
+            <?php if ($loggedIn): ?>
+                <div class="me-4"> 
+                    <b class="text-white">Bem-vindo, <?= h($username); ?></b>
+                    <!--<p class="text-white m-0"> Você é um <?= h($role); ?></p>-->
+                </div>
+            <?php else: ?>
+                <span class="text-white">Bem-vindo, visitante!</span>
+            <?php endif; ?>
         </div>
     </nav>
 
