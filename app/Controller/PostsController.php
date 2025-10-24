@@ -24,7 +24,8 @@ class PostsController extends AppController
             if ($search !== '') {
                 $conditions['OR'] = array(
                     'LOWER(Post.title) LIKE' => '%' . strtolower($search) . '%',
-                    'LOWER(Post.content) LIKE' => '%' . strtolower($search) . '%'
+                    'LOWER(Post.content) LIKE' => '%' . strtolower($search) . '%',
+                    'LOWER(User.username) LIKE' => '%' . strtolower($search) . '%'
                 );
             }
         }
@@ -44,10 +45,8 @@ class PostsController extends AppController
     {
         if ($this->request->is('post')) {
             $this->Post->create();
-            // garante que o post pertence ao usuário logado
             $this->request->data['Post']['user_id'] = $this->Auth->user('id');
 
-            // tenta salvar; validações do model (incluindo content notBlank) serão aplicadas
             if ($this->Post->save($this->request->data)) {
                 $this->Flash->success(__('Post criado com sucesso.'));
                 return $this->redirect(array('action' => 'index'));
@@ -74,9 +73,8 @@ class PostsController extends AppController
         }
 
         $post = $this->Post->findById($id);
-        
 
-        // Verifica se o post pertence ao usuário logado
+
         if ($post['Post']['user_id'] != $this->Auth->user('id')) {
             $this->Flash->error(__('Você não tem permissão para editar este post.'));
             return $this->redirect(array('action' => 'index'));
@@ -122,13 +120,13 @@ class PostsController extends AppController
 
     public function dashboard()
     {
-        $myPosts = $this->Post->find('all', array(
-            'conditions' => array('Post.user_id' => $this->Auth->user('id')),
-            'order' => array('Post.created' => 'desc')
-        ));
-        $totalPosts = $this->Post->find('count');
-        $publishedPosts = $this->Post->find('count', array('conditions' => array('Post.status' => 'published')));
-        $draftPosts = $this->Post->find('count', array('conditions' => array('Post.status' => 'draft')));
+        $myPosts = $this->Post->find('all', array('conditions' => array('Post.user_id' => $this->Auth->user('id')), 'order' => array('Post.created' => 'desc')));
+
+        $totalPosts = $this->Post->find('count', array('conditions' => array('Post.user_id' => $this->Auth->user('id'))));
+
+        $publishedPosts = $this->Post->find('count', array('conditions' => array('Post.status' => 'published', 'Post.user_id' => $this->Auth->user('id'))));
+
+        $draftPosts = $this->Post->find('count', array('conditions' => array('Post.status' => 'draft', 'Post.user_id' => $this->Auth->user('id'))));
 
         $this->set(compact('totalPosts', 'publishedPosts', 'draftPosts', 'myPosts'));
     }
