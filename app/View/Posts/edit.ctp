@@ -17,5 +17,3 @@
         document.querySelector('input[name="data[Post][status]"]').value = status;
     }
 </script>
-
-</script>
