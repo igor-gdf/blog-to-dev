@@ -14,10 +14,6 @@ RUN apt-get update && apt-get install -y --allow-unauthenticated \
     && docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
     && docker-php-ext-install pdo pdo_pgsql pgsql intl
 
-# --- NOVA LINHA PARA CORRIGIR O FUSO HORÁRIO ---
-# Define o fuso horário para o PHP para evitar avisos. Usei o de São Paulo como exemplo.
-RUN printf '\ndate.timezone = "America/Sao_Paulo"\n' > /usr/local/etc/php/conf.d/tzone.ini
-
 # Habilita o mod_rewrite do Apache para as URLs amigáveis do CakePHP
 RUN a2enmod rewrite
 
