@@ -18,9 +18,9 @@ class PostsController extends AppController
             'Post.deleted_at' => null
         );
 
+        // Filtro por busca textual
         if (!empty($this->request->query['search'])) {
             $search = trim($this->request->query['search']);
-
             if ($search !== '') {
                 $conditions['OR'] = array(
                     'LOWER(Post.title) LIKE' => '%' . strtolower($search) . '%',
@@ -28,6 +28,16 @@ class PostsController extends AppController
                     'LOWER(User.username) LIKE' => '%' . strtolower($search) . '%'
                 );
             }
+        }
+
+        // Filtro por data de criação
+        if (!empty($this->request->query['created_from'])) {
+            $from = $this->request->query['created_from'] . ' 00:00:00';
+            $conditions['Post.created >='] = $from;
+        }
+        if (!empty($this->request->query['created_to'])) {
+            $to = $this->request->query['created_to'] . ' 23:59:59';
+            $conditions['Post.created <='] = $to;
         }
 
         $this->Paginator->settings = array(
@@ -38,7 +48,6 @@ class PostsController extends AppController
         );
 
         $posts = $this->Paginator->paginate('Post');
-
         $this->set(compact('posts'));
     }
     public function add()

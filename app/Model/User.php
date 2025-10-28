@@ -31,25 +31,6 @@ class User extends AppModel
                 'message' => 'Username já existe'
             )
         ),
-        'email' => array(
-            'notBlank' => array(
-                'rule' => 'notBlank',
-                'message' => 'Email é obrigatório',
-                'allowEmpty' => false
-            ),
-            'email' => array(
-                'rule' => 'email',
-                'message' => 'Email deve ter um formato válido'
-            ),
-            'maxLength' => array(
-                'rule' => array('maxLength', 100),
-                'message' => 'Email deve ter no máximo 100 caracteres'
-            ),
-            'isUnique' => array(
-                'rule' => 'isUnique',
-                'message' => 'Email já existe'
-            )
-        ),
         'password' => array(
             'notBlank' => array(
                 'rule' => 'notBlank',
@@ -66,7 +47,7 @@ class User extends AppModel
         ),
         'role' => array(
             'rule' => array('inList', array('admin', 'author')),
-            'message' => 'Role inválida. Deve ser admin ou user',
+            'message' => 'Role inválida. Deve ser admin ou author',
             'allowEmpty' => false
         ),
     );
@@ -141,7 +122,6 @@ class User extends AppModel
             $search = '%' . $filters['search'] . '%';
             $conditions['OR'] = array(
                 $this->alias . '.username LIKE' => $search,
-                $this->alias . '.email LIKE' => $search
             );
         }
 
@@ -151,7 +131,7 @@ class User extends AppModel
 
         $defaults = array(
             'conditions' => $conditions,
-            'fields' => array('id', 'username', 'email', 'role', 'created', 'modified'),
+            'fields' => array('id', 'username', 'role', 'created', 'modified'),
             'order' => array($this->alias . '.created' => 'DESC')
         );
 
