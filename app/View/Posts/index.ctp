@@ -1,6 +1,10 @@
 <div class="search-form">
     <?php
-    echo $this->Form->create('Post', array('type' => 'get', 'class' => 'd-flex mb-3 gap-3', 'url' => array('action' => 'index')));
+    echo $this->Form->create('Post', array(
+        'type' => 'get',
+        'class' => 'd-flex mb-3 gap-3',
+        'url' => array('action' => 'index')
+    ));
 
     echo $this->Form->input('search', array(
         'label' => false,
@@ -9,7 +13,26 @@
         'placeholder' => 'Buscar...',
         'value' => isset($this->request->query['search']) ? $this->request->query['search'] : ''
     ));
-
+    ?>
+    <input
+            type="text"
+            name="created_from"
+            class="form-control"
+            placeholder="Data inicial"
+            value="<?= isset($this->request->query['created_from']) ? h($this->request->query['created_from']) : '' ?>"
+            onfocus="this.type='date'"
+            onblur="if(!this.value)this.type='text'"
+        />
+        <input
+            type="text"
+            name="created_to"
+            class="form-control"
+            placeholder="Data final"
+            value="<?= isset($this->request->query['created_to']) ? h($this->request->query['created_to']) : '' ?>"
+            onfocus="this.type='date'"
+            onblur="if(!this.value)this.type='text'"
+        />
+    <?php
     echo $this->Form->submit('Pesquisar', array('class' => 'btn border-black'));
     echo $this->Form->end();
     ?>
