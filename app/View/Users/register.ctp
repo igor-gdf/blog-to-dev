@@ -38,6 +38,10 @@
                         )); ?>
                     </div>
 
+                    <div class="mb-3">
+                        <?php echo $this->Form->input('role', array('type' => '', 'value' => 'author')); ?>
+                    </div>
+
                     <div class="d-grid">
                         <?php echo $this->Form->submit(__('Registrar'), array('class' => 'btn bg-black text-white btn-lg')); ?>
                         <?php echo $this->Form->end(); ?>
