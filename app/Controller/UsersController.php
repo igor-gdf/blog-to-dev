@@ -75,12 +75,35 @@ class UsersController extends AppController
         );
         return $this->redirect($this->Auth->logout());
     }
+    
+    public function admin_index() {
+        // Apenas admin pode acessar
+        $currentUser = $this->Auth->user();
+        if (!$currentUser || $currentUser['role'] !== 'admin') {
+            $this->Flash->error('Acesso negado.');
+            return $this->redirect(['controller' => 'posts', 'action' => 'index']);
+        }
 
+        $users = $this->User->find('all', [
+            'fields' => ['id', 'username', 'role', 'created', 'modified'],
+            'order' => ['User.created' => 'desc']
+        ]);
+        $this->set(compact('users'));
+    }
 
-/*  public function admin_index() {}
-    public function admin_view() {}
-    public function admin_add() {}
-    public function admin_edit() {}
-    public function admin_delete() {}
-*/
+    public function admin_edit($id = null) {
+        $currentUser = $this->Auth->user();
+        if (!$currentUser || $currentUser['role'] !== 'admin') {
+            $this->Flash->error('Acesso negado.');
+            return $this->redirect(['controller' => 'posts', 'action' => 'index']);
+        }
+
+        $user = $this->User->findById($id);
+        if (!$user || $user['User']['role'] === 'admin') {
+            $this->Flash->error('Não é permitido editar outro admin.');
+            return $this->redirect(['action' => 'admin_index']);
+        }
+        $this->set('user', $user);
+    }
+
 }
