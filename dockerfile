@@ -19,3 +19,5 @@ RUN a2enmod rewrite
 
 # Define o diretório de trabalho dentro do contêiner
 WORKDIR /var/www/html
+
+RUN echo "date.timezone = \"America/Recife\"" > /usr/local/etc/php/conf.d/timezone.ini
