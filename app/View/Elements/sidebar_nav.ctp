@@ -19,8 +19,7 @@
             <!--<?= $this->Html->image('user.png', array('alt' => 'User Icon', 'class' => 'me-2')); ?>-->
             <?php if ($loggedIn): ?>
                 <div class="me-4"> 
-                    <b class="text-white">Bem-vindo, <?= h($username); ?></b>
-                    <!--<p class="text-white m-0"> Você é um <?= h($role); ?></p>-->
+                    <b class="text-white">Bem-vindo, <?= h($username); ?> | <?= ucfirst(h($role)); ?></b>
                 </div>
             <?php else: ?>
                 <span class="text-white">Bem-vindo, visitante!</span>
@@ -43,6 +42,11 @@
                     <li class="nav-item">
                         <?php echo $this->Html->link($this->Html->image('perfil.svg', ['alt' => 'Perfil', 'class' => 'me-2 mb-1']) . 'Perfil', array('controller' => 'users', 'action' => 'profile'), array('class' => 'nav-link d-inline-flex align-items-center text-white', 'escape' => false)); ?>
                     </li>
+                    <?php if ($loggedIn && $role === 'admin'): ?>
+                        <li class="nav-item">
+                            <?php echo $this->Html->link($this->Html->image('users.svg', ['alt' => 'Usuários', 'class' => 'me-2 mb-1']) . 'Usuários', array('controller' => 'users', 'action' => 'admin_index'), array('class' => 'nav-link d-inline-flex align-items-center text-white', 'escape' => false)); ?>
+                        </li>
+                    <?php endif; ?>
                 </ul>
             </div>
 
