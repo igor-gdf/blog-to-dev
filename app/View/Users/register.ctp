@@ -39,7 +39,7 @@
                     </div>
 
                     <div class="mb-3">
-                        <?php echo $this->Form->input('role', array('type' => '', 'value' => 'author')); ?>
+                        <?php echo $this->Form->input('role', array('type' => 'hidden', 'value' => 'author')); ?>
                     </div>
 
                     <div class="d-grid">
