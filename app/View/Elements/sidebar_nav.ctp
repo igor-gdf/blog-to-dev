@@ -18,7 +18,7 @@
         <div class="d-flex">
             <!--<?= $this->Html->image('user.png', array('alt' => 'User Icon', 'class' => 'me-2')); ?>-->
             <?php if ($loggedIn): ?>
-                <div class="me-4"> 
+                <div class="me-4">
                     <b class="text-white">Bem-vindo, <?= h($username); ?> | <?= ucfirst(h($role)); ?></b>
                 </div>
             <?php else: ?>
@@ -45,6 +45,10 @@
                     <?php if ($loggedIn && $role === 'admin'): ?>
                         <li class="nav-item">
                             <?php echo $this->Html->link($this->Html->image('users.svg', ['alt' => 'Usuários', 'class' => 'me-2 mb-1']) . 'Usuários', array('controller' => 'users', 'action' => 'admin_index'), array('class' => 'nav-link d-inline-flex align-items-center text-white', 'escape' => false)); ?>
+                        </li>
+
+                        <li class="nav-item">
+                            <?php echo $this->Html->link($this->Html->image('list.svg', ['alt' => 'Lista', 'class' => 'me-2 mb-1']) . 'All posts', array('controller' => 'posts', 'action' => 'admin_index'), array('class' => 'nav-link d-inline-flex align-items-center text-white', 'escape' => false)); ?>
                         </li>
                     <?php endif; ?>
                 </ul>
