@@ -110,7 +110,7 @@ class PostsController extends AppController
     // ======================================================
     public function delete($id = null)
     {
-        $this->request->allowMethod('post', 'delete'); // 🔒 segurança HTTP
+        $this->request->allowMethod('post', 'delete');
 
         $post = $this->_getPostOrThrow($id);
         $this->_authorizeOwner($post);
@@ -127,25 +127,55 @@ class PostsController extends AppController
     // ======================================================
     // DASHBOARD DO USUÁRIO
     // ======================================================
+
     public function dashboard()
     {
         $userId = $this->Auth->user('id');
-
         $conditions = ['Post.user_id' => $userId];
+
+        if (!empty($this->request->query['status'])) {
+            $conditions['Post.status'] = $this->request->query['status'];
+        }
+
         $myPosts = $this->Post->find('all', [
             'conditions' => $conditions,
             'order' => ['Post.created' => 'desc']
         ]);
 
-        $totalPosts = $this->Post->find('count', ['conditions' => $conditions]);
+        $totalPosts = $this->Post->find('count', ['conditions' => ['Post.user_id' => $userId]]);
         $publishedPosts = $this->Post->find('count', [
-            'conditions' => ['Post.status' => 'published'] + $conditions
+            'conditions' => ['Post.status' => 'published', 'Post.user_id' => $userId]
         ]);
         $draftPosts = $this->Post->find('count', [
-            'conditions' => ['Post.status' => 'draft'] + $conditions
+            'conditions' => ['Post.status' => 'draft', 'Post.user_id' => $userId]
         ]);
 
         $this->set(compact('totalPosts', 'publishedPosts', 'draftPosts', 'myPosts'));
+    }
+
+    // ======================================================
+    // ADMIN: LISTAR TODOS OS POSTS
+    // ======================================================
+
+    public function admin_index()
+    {
+        $this->_checkAdmin();
+        $conditions = [];
+        if (!empty($this->request->query['status'])) {
+            $conditions['Post.status'] = $this->request->query['status'];
+        }
+
+        $posts = $this->Post->find('all', [
+            'conditions' => $conditions,
+            'order' => ['Post.created' => 'desc']
+        ]);
+
+        $allPosts = $this->Post->find('all', [
+            'conditions' => $conditions,
+            'order' => ['Post.created' => 'desc']
+        ]);
+
+        $this->set(compact('posts', 'allPosts'));
     }
 
     // ======================================================
@@ -176,4 +206,15 @@ class PostsController extends AppController
         }
         return true;
     }
+    private function _checkAdmin()
+    {
+        $user = $this->Auth->user();
+        if (!$user || $user['role'] !== 'admin') {
+            $this->Flash->error('Acesso restrito a administradores.');
+            $this->redirect(['controller' => 'posts', 'action' => 'index']);
+            exit;
+        }
+    }
+
+
 }
