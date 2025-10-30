@@ -1,14 +1,22 @@
 <div class="dashboard">
-    <h1 class="h3 mb-3">Dashboard</h1>
-    <p>Bem-vindo ao seu painel de controle! Aqui você pode gerenciar seus posts, visualizar estatísticas e acessar
-        outras funcionalidades importantes do blog.</p>
-    <div class="mb-4">
-        <h2 class="h5">Estatísticas dos Posts</h2>
+        <h2 class="h5">Suas estatísticas de Posts</h2>
         <ul>
             <li>Total de Posts: <?= h($totalPosts) ?></li>
             <li>Posts Publicados: <?= h($publishedPosts) ?></li>
             <li>Posts em Rascunho: <?= h($draftPosts) ?></li>
         </ul>
+    </div>
+    <div class="mb-3">
+        <form method="get" class="d-flex gap-2">
+            <select name="status" class="form-control w-auto">
+                <option value="">Todos</option>
+                <option value="published" <?= ($this->request->query('status') === 'published') ? 'selected' : '' ?>>Ativo
+                </option>
+                <option value="draft" <?= ($this->request->query('status') === 'draft') ? 'selected' : '' ?>>Rascunho
+                </option>
+            </select>
+            <button type="submit" class="btn btn-dark">Filtrar</button>
+        </form>
     </div>
     <div class="overflow-auto row g-3" style="max-height: 45vh;">
         <?php foreach ($myPosts as $post): ?>
@@ -33,22 +41,3 @@
         <?php endforeach; ?>
     </div>
 </div>
-
-<script>
-
-
-    function setClassColor(element, status) {
-        if (status === 'published') {
-            element.classList.add('text-success');
-        }else if (status === 'draft') {
-            element.classList.add('text-warning');
-        }else {
-            element.classList.add('text-danger');
-        }
-    }
-
-    document.querySelectorAll('.card-footer small:nth-child(2)').forEach(function(element) {
-        var status = element.textContent.trim().toLowerCase();
-        setClassColor(element, status);
-    });
-</script>
