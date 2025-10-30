@@ -11,9 +11,3 @@
     <button type="submit" class="btn border-black text-black mb-3" onclick="setStatus('published')">Publicar edição</button>
     <button type="submit" class="btn border-black text-black mb-3" onclick="setStatus('draft')">Salvar como rascunho</button>
 </form>
-
-<script>
-    function setStatus(status) {
-        document.querySelector('input[name="data[Post][status]"]').value = status;
-    }
-</script>
