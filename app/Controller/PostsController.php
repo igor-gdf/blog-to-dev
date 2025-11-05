@@ -21,7 +21,7 @@ class PostsController extends AppController
             'Post.deleted_at' => null
         ];
 
-        // 🔍 Filtro por texto
+        // Filtro por texto
         $search = isset($this->request->query['search']) ? trim(strtolower($this->request->query['search'])) : '';
         if ($search !== '') {
             $conditions['OR'] = [
@@ -32,7 +32,7 @@ class PostsController extends AppController
         }
 
 
-        // 📅 Filtro por datas
+        // Filtro por datas
         if (!empty($this->request->query('created_from'))) {
             $conditions['Post.created >='] = $this->request->query('created_from') . ' 00:00:00';
         }
@@ -40,7 +40,7 @@ class PostsController extends AppController
             $conditions['Post.created <='] = $this->request->query('created_to') . ' 23:59:59';
         }
 
-        // ⚙️ Paginação
+        // Paginação
         $this->Paginator->settings = [
             'conditions' => $conditions,
             'limit' => 10,
