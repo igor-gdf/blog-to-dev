@@ -1,4 +1,4 @@
-<div class="search-form">
+<div class="search-form ">
     <?php
     echo $this->Form->create('Post', array(
         'type' => 'get',
