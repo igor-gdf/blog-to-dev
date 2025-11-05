@@ -23,7 +23,7 @@ services:
     container_name: blog_cakephp_web
     restart: always
     ports:
-      - "8080:80"
+      - "8181:80"
     volumes:
       - .:/var/www/html
       - /etc/timezone:/etc/timezone:ro
