@@ -12,7 +12,12 @@
             <?php echo $this->Html->link(
                 $this->Html->image('logo.svg', array('alt' => 'Logo')),
                 array('controller' => 'posts', 'action' => 'index'),
-                array('class' => 'navbar-brand', 'escape' => false)
+                array('class' => 'navbar-brand d-none d-md-flex', 'escape' => false)
+            ); ?>
+            <?php echo $this->Html->link(
+                $this->Html->image('logomob.svg', array('alt' => 'Logo')),
+                array('controller' => 'posts', 'action' => 'index'),
+                array('class' => 'navbar-brand d-md-none', 'escape' => false)
             ); ?>
         </div>
         <div class="d-flex">
@@ -26,11 +31,11 @@
             <?php endif; ?>
         </div>
     </nav>
-
+    <!-- Sidebar -->
     <div class="row g-0">
-        <!-- Sidebar -->
         <nav id="sidebar"
-            class="d-flex justify-content-between flex-column col-md-3 col-lg-2 bg-black sidebar border-end border-dark">
+            class="d-none d-md-flex flex-column justify-content-between col-md-3 col-lg-2 bg-black border-end border-dark">
+
             <div class="position-sticky pt-3">
                 <ul class="nav flex-column">
                     <li class="nav-item">
@@ -80,4 +85,62 @@
                     </li>
                 </ul>
             </div>
+        </nav>
+
+        <!-- Barra inferior fixa, inspirada na barra lateral -->
+        <nav class="navbar navbar-expand bg-black border-top border-dark fixed-bottom d-md-none p-3">
+            <ul class="navbar-nav d-flex flex-row justify-content-around w-100">
+                <li class="nav-item">
+                    <?php echo $this->Html->link(
+                        $this->Html->image('home.svg', ['alt' => 'Home', 'class' => 'me-1 mb-1']) . '',
+                        ['controller' => 'posts', 'action' => 'index'],
+                        ['class' => 'nav-link text-white px-2', 'escape' => false]
+                    ); ?>
+                </li>
+                <li class="nav-item">
+                    <?php echo $this->Html->link(
+                        $this->Html->image('dashboard.svg', ['alt' => 'Dashboard', 'class' => 'me-1 mb-1']) . '',
+                        ['controller' => 'posts', 'action' => 'dashboard'],
+                        ['class' => 'nav-link text-white px-2', 'escape' => false]
+                    ); ?>
+                </li>
+                <li class="nav-item">
+                    <?php echo $this->Html->link(
+                        $this->Html->image('perfil.svg', ['alt' => 'Perfil', 'class' => 'me-1 mb-1']) . '',
+                        ['controller' => 'users', 'action' => 'profile'],
+                        ['class' => 'nav-link text-white px-2', 'escape' => false]
+                    ); ?>
+                </li>
+                <?php if ($loggedIn && $role === 'admin'): ?>
+                    <li class="nav-item">
+                        <?php echo $this->Html->link(
+                            $this->Html->image('users.svg', ['alt' => 'Usuários', 'class' => 'me-1 mb-1']) . '',
+                            ['controller' => 'users', 'action' => 'admin_index'],
+                            ['class' => 'nav-link text-warning px-2', 'escape' => false]
+                        ); ?>
+                    </li>
+                    <li class="nav-item">
+                        <?php echo $this->Html->link(
+                            $this->Html->image('list.svg', ['alt' => 'Lista', 'class' => 'me-1 mb-1']) . '',
+                            ['controller' => 'posts', 'action' => 'admin_index'],
+                            ['class' => 'nav-link text-white px-2', 'escape' => false]
+                        ); ?>
+                    </li>
+                <?php endif; ?>
+                <li class="nav-item">
+                    <?php if ($loggedIn): ?>
+                        <?= $this->Html->link(
+                            $this->Html->image('logout.svg', ['alt' => 'Logout', 'class' => 'me-1']) . '',
+                            ['controller' => 'users', 'action' => 'logout'],
+                            ['class' => 'nav-link text-danger px-2', 'escape' => false]
+                        ) ?>
+                    <?php else: ?>
+                        <?= $this->Html->link(
+                            $this->Html->image('login.svg', ['alt' => 'Login', 'class' => 'me-1']) . '',
+                            ['controller' => 'users', 'action' => 'login'],
+                            ['class' => 'nav-link text-success px-2', 'escape' => false]
+                        ) ?>
+                    <?php endif; ?>
+                </li>
+            </ul>
         </nav>
