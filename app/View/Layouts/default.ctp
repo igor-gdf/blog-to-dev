@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <?= $this->Html->charset(); ?>
     <title><?= $this->fetch('title') ?></title>
     <?= $this->Html->meta('icon'); ?>
@@ -19,7 +20,6 @@
         <?php if (empty($hideSidebar)): ?>
             <?= $this->element('sidebar_nav') ?>
         <?php endif; ?>
-
         <main class="<?= empty($hideSidebar) ? 'col-md-9 col-lg-10' : 'col-12' ?> bg-light">
             <div class="p-4">
                 <?= $this->Flash->render() ?>
