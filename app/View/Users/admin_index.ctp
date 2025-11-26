@@ -17,7 +17,7 @@
             <td><?= h($user['User']['role']) ?></td>
             <td><?= h($user['User']['created']) ?></td>
             <td>
-                <?= $this->Html->link('Editar', ['action' => 'admin_edit', $user['User']['id']], ['class' => 'btn btn-sm btn-primary']) ?>
+                <?= $this->Html->link('Editar', ['action' => 'admin_edit', $user['User']['id']], ['class' => 'btn bg-black text-white btn-sm']) ?>
             </td>
         </tr>
         <?php endforeach; ?>

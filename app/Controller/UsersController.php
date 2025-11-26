@@ -22,6 +22,10 @@ class UsersController extends AppController
     public function register()
     {
         if ($this->request->is('post')) {
+            if (empty($this->request->data['User']['role'])) {
+                $this->request->data['User']['role'] = 'author';
+            }
+
             $data = $this->request->data;
 
             // Verifica senhas

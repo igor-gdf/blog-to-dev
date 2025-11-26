@@ -1,4 +1,3 @@
-# Use uma imagem base com PHP 5.6 e Apache, compatível com CakePHP 2.x
 FROM php:5.6-apache
 
 # A imagem base usa Debian 9 "Stretch", cujos repositórios de pacotes foram movidos para um arquivo.

@@ -1,16 +1,14 @@
-version: '3.8'
 
 services:
   db:
-    image: postgres:12
-    container_name: blog_cakephp_db
+    image: postgres:12    
     restart: always
     environment:
-      POSTGRES_USER: bloguser
-      POSTGRES_PASSWORD: blogpassword
-      POSTGRES_DB: blogdb
+      - POSTGRES_USER=bloguser
+      - POSTGRES_PASSWORD=blogpassword
+      - POSTGRES_DB=blogdb
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - ./data/pgdata:/var/lib/postgresql/data
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     ports:
