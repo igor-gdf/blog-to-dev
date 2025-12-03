@@ -47,3 +47,16 @@ CREATE TABLE IF NOT EXISTS cake_sessions (
 -- - Execute `CREATE DATABASE blog;` antes de importar, ou ajuste para o nome do seu DB.
 -- - Para importar via psql: `psql -h <host> -U <user> -d <db> -f db/schema_postgres.sql`
 -- - Se o serviço Postgres estiver em container Docker, use `docker exec -i <container> psql -U <user> -d <db> < db/schema_postgres.sql`
+
+docker-compose ps
+# ou
+docker ps --filter "ancestor=postgres" --format "table {{.ID}}\t{{.Names}}\t{{.Ports}}"
+
+# lista tabelas (antes da importação)
+docker-compose exec -T db psql -U bloguser -d blogdb -c "\dt"
+
+# importar (redireciona o arquivo local para o psql dentro do container)
+docker-compose exec -T db psql -U bloguser -d blogdb < db/schema_postgres.sql
+
+# lista tabelas (depois da importação)
+docker-compose exec -T db psql -U bloguser -d blogdb -c "\dt"
