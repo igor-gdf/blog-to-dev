@@ -1,13 +1,7 @@
-FROM php:5.6-apache
-
-# A imagem base usa Debian 9 "Stretch", cujos repositórios de pacotes foram movidos para um arquivo.
-# O comando abaixo atualiza a lista de fontes do apt para apontar para os repositórios arquivados.
-RUN echo "deb http://archive.debian.org/debian/ stretch main" > /etc/apt/sources.list \
-    && echo "deb http://archive.debian.org/debian-security stretch/updates main" >> /etc/apt/sources.list
+FROM php:7.4-apache
 
 # Instala as dependências do sistema e as extensões PHP necessárias
-# Adicionamos --allow-unauthenticated para aceitar pacotes com assinaturas expiradas do repositório arquivado.
-RUN apt-get update && apt-get install -y --allow-unauthenticated \
+RUN apt-get update && apt-get install -y \
     libpq-dev \
     libicu-dev \
     && docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
@@ -20,3 +14,13 @@ RUN a2enmod rewrite
 WORKDIR /var/www/html
 
 RUN echo "date.timezone = \"America/Recife\"" > /usr/local/etc/php/conf.d/timezone.ini
+
+# Fix permissions for CakePHP cache and logs directories
+RUN mkdir -p app/tmp/cache/persistent app/tmp/cache/models app/tmp/cache/views app/tmp/logs && \
+    chmod -R 777 app/tmp
+
+# Add entrypoint script
+COPY docker-entrypoint.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]

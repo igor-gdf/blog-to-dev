@@ -13,11 +13,12 @@ services:
       - /etc/localtime:/etc/localtime:ro
     ports:
       - "5432:5432"
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
 
   web:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: blog-to-dev:latest
     container_name: blog_cakephp_web
     restart: always
     ports:
@@ -28,6 +29,9 @@ services:
       - /etc/localtime:/etc/localtime:ro
     depends_on:
       - db
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
 
 volumes:
   pgdata:
