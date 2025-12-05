@@ -7,7 +7,7 @@ DO $$ BEGIN
         CREATE TYPE role_type AS ENUM ('admin','author');
     END IF;
     IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'post_status') THEN
-        CREATE TYPE post_status AS ENUM ('draft','published','deleted');
+        CREATE TYPE post_status AS ENUM ('draft','published');
     END IF;
 END$$;
 
@@ -18,7 +18,8 @@ CREATE TABLE IF NOT EXISTS users (
   password VARCHAR(255) NOT NULL,
   role role_type NOT NULL DEFAULT 'author',
   created TIMESTAMP WITHOUT TIME ZONE NOT NULL,
-  modified TIMESTAMP WITHOUT TIME ZONE NOT NULL
+  modified TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+  deleted_at TIMESTAMP WITHOUT TIME ZONE DEFAULT NULL
 );
 
 -- Tabela de posts
@@ -36,12 +37,6 @@ CREATE TABLE IF NOT EXISTS posts (
 CREATE INDEX IF NOT EXISTS idx_posts_user_id ON posts(user_id);
 CREATE INDEX IF NOT EXISTS idx_posts_created ON posts(created);
 
--- Tabela de sessões (CakePHP)
-CREATE TABLE IF NOT EXISTS cake_sessions (
-  id VARCHAR(255) PRIMARY KEY,
-  data TEXT,
-  expires INTEGER
-);
 
 -- Observações:
 -- - Execute `CREATE DATABASE blog;` antes de importar, ou ajuste para o nome do seu DB.
