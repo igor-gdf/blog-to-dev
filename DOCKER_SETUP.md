@@ -56,7 +56,6 @@ cat db/schema_postgres.sql | docker exec -i blog-db psql -U bloguser -d blogdb
 Isto criará as tabelas necessárias:
 - `users`
 - `posts`
-- `cake_sessions`
 
 ### 4. Criar Usuário Admin
 

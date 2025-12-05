@@ -14,6 +14,10 @@
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
 
+// Carrega variáveis de ambiente
+require_once dirname(__FILE__) . DS . 'env.php';
+loadEnv();
+
 /**
  * Database configuration class.
  *
@@ -78,4 +82,19 @@ class DATABASE_CONFIG
 		'persistent' => false,
 		'prefix' => '',		
 	);
+	
+	public function __construct() {
+		// Sobrescreve valores padrão com variáveis de ambiente se disponíveis
+		$this->default = array_merge($this->default, array(
+			'datasource' => getEnvVar('DB_DATASOURCE', $this->default['datasource']),
+			'host' => getEnvVar('DB_HOST', $this->default['host']),
+			'login' => getEnvVar('DB_USERNAME', $this->default['login']),
+			'password' => getEnvVar('DB_PASSWORD', $this->default['password']),
+			'database' => getEnvVar('DB_DATABASE', $this->default['database']),
+			'port' => getEnvVar('DB_PORT', $this->default['port']),
+			'encoding' => getEnvVar('DB_ENCODING', $this->default['encoding']),
+			'persistent' => getEnvVar('DB_PERSISTENT', $this->default['persistent']),
+			'prefix' => getEnvVar('DB_PREFIX', $this->default['prefix']),
+		));
+	}
 }
