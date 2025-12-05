@@ -1,15 +1,4 @@
-<div class="alert alert-warning position-fixed bottom-0 end-0 m-3">
+<div class="alert alert-warning alert-dismissible fade show position-fixed bottom-0 end-0 m-3" role="alert">
     <?= h($message) ?>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const alertNode = document.querySelector('.alert');
-    if (alertNode) {
-        setTimeout(() => {
-            const bsAlert = bootstrap.Alert.getOrCreateInstance(alertNode);
-            bsAlert.close(); // fecha automaticamente após X ms
-        }, 5000); // 5000ms = 5 segundos
-    }
-});
-</script>
