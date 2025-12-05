@@ -29,7 +29,7 @@ class Post extends AppModel
             'message' => 'Conteúdo é obrigatório'
         ),
         'status' => array(
-            'rule' => array('inList', array('draft', 'published', 'deleted')),
+            'rule' => array('inList', array('draft', 'published')),
             'message' => 'Status inválido'
         )
     );
@@ -78,9 +78,6 @@ class Post extends AppModel
         foreach ($results as &$result) {
             if (isset($result[$this->alias]['created'])) {
                 $result[$this->alias]['created'] = date('d/m/Y H:i', strtotime($result[$this->alias]['created']));
-            }
-            if (isset($result[$this->alias]['deleted_at']) && $result[$this->alias]['deleted_at']) {
-                $result[$this->alias]['status'] = 'deleted';
             }
         }
         return $results;
@@ -141,8 +138,28 @@ class Post extends AppModel
             return false;
         }
 
+        // Soft delete
         $this->id = $id;
         return $this->saveField('deleted_at', date('Y-m-d H:i:s'));
+    }
+
+    /**
+     * Restaura post deletado
+     */
+    public function restorePost($id, $currentUser)
+    {
+        $post = $this->find('first', array(
+            'conditions' => array($this->alias . '.id' => $id)
+        ));
+        
+        if (!$post || !$post[$this->alias]['deleted_at']) return false;
+
+        if ($currentUser['role'] !== 'admin' && $post[$this->alias]['user_id'] != $currentUser['id']) {
+            return false;
+        }
+
+        $this->id = $id;
+        return $this->saveField('deleted_at', null);
     }
 
     public function editPost($id, $data, $currentUser)

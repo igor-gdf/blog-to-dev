@@ -116,7 +116,9 @@ class User extends AppModel
      */
     public function getFilteredUsers($filters = array(), $options = array())
     {
-        $conditions = array();
+        $conditions = array(
+            $this->alias . '.deleted_at' => null  // Exclui usuários deletados
+        );
 
         if (!empty($filters['search'])) {
             $search = '%' . $filters['search'] . '%';
@@ -138,5 +140,23 @@ class User extends AppModel
         $options = array_merge($defaults, $options);
 
         return $this->find('all', $options);
+    }
+
+    /**
+     * Soft delete de usuário
+     */
+    public function softDelete($id)
+    {
+        $this->id = $id;
+        return $this->saveField('deleted_at', date('Y-m-d H:i:s'));
+    }
+
+    /**
+     * Restaura usuário deletado
+     */
+    public function restore($id)
+    {
+        $this->id = $id;
+        return $this->saveField('deleted_at', null);
     }
 }

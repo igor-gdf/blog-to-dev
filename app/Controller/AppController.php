@@ -39,4 +39,41 @@ class AppController extends Controller
         // Permite o resto por padrão
         return true;
     }
+
+    /**
+     * Verifica se usuário atual é admin
+     * Redireciona para posts/index se não for
+     */
+    protected function _checkAdmin()
+    {
+        $currentUser = $this->Auth->user();
+        if (!$currentUser || $currentUser['role'] !== 'admin') {
+            $this->Flash->error('Acesso restrito a administradores.');
+            $this->redirect(['controller' => 'posts', 'action' => 'index']);
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Verifica se usuário atual é admin (retorna boolean)
+     */
+    protected function _isAdmin()
+    {
+        $currentUser = $this->Auth->user();
+        return $currentUser && isset($currentUser['role']) && $currentUser['role'] === 'admin';
+    }
+
+    /**
+     * Verifica se usuário atual é dono do recurso ou admin
+     */
+    protected function _isOwnerOrAdmin($ownerId)
+    {
+        $currentUser = $this->Auth->user();
+        if (!$currentUser) {
+            return false;
+        }
+        
+        return $this->_isAdmin() || $currentUser['id'] == $ownerId;
+    }
 }
