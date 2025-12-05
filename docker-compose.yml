@@ -12,26 +12,28 @@ services:
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     ports:
-      - "5432:5432"
-    dns:
-      - 8.8.8.8
-      - 8.8.4.4
+      - "5434:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U bloguser -d blogdb"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   web:
-    image: blog-to-dev:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: blog_cakephp_web
     restart: always
     ports:
-      - "8181:80"
+      - "8182:80"
     volumes:
       - .:/var/www/html
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     depends_on:
-      - db
-    dns:
-      - 8.8.8.8
-      - 8.8.4.4
+      db:
+        condition: service_healthy
 
 volumes:
   pgdata:
