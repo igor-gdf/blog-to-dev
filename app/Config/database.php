@@ -69,11 +69,11 @@ class DATABASE_CONFIG
 
 	public $default = array(
 		'datasource' => 'Database/Postgres',
-		'host' => 'db',
+		'host' => '172.17.0.1',
 		'login' => 'bloguser',
 		'password' => 'blogpassword',
 		'database' => 'blogdb',
-		'port' => '5432',
+		'port' => '5433',
 		'encoding' => 'utf8',		
 		'persistent' => false,
 		'prefix' => '',		
