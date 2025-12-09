@@ -33,12 +33,12 @@
             onblur="if(!this.value)this.type='text'"
         />
     <?php
-    echo $this->Form->submit('Pesquisar', array('class' => 'btn border-black'));
+    echo $this->Form->submit('Pesquisar', array('class' => 'btn btn-outline-dark'));
     echo $this->Form->end();
     ?>
 </div>
 
-<?= $this->Html->link($this->Html->image('send-m.svg', ['alt' => 'Novo Post', 'class' => 'me-2']) . 'Adicionar novo post', ['controller' => 'posts', 'action' => 'add'], ['class' => 'btn border-black mb-3', 'escape' => false]) ?>
+<?= $this->Html->link($this->Html->image('send-m.svg', ['alt' => 'Novo Post', 'class' => 'me-2']) . 'Adicionar novo post', ['controller' => 'posts', 'action' => 'add'], ['class' => 'btn btn-outline-dark mb-3', 'escape' => false]) ?>
 
 <?php if (!empty($posts)): ?>
     <div class="d-flex align-items-center justify-content-between mb-3">
