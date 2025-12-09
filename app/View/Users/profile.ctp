@@ -1,7 +1,7 @@
 <div class="p-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
         <h2>Meu Perfil</h2>
-        <?= $this->Html->link('Editar Conta', ['action' => 'edit'], ['class' => 'btn btn-primary']) ?>
+        <?= $this->Html->link('Editar Conta', ['action' => 'edit'], ['class' => 'btn btn-dark']) ?>
     </div>
 
     <div class="card">
@@ -15,7 +15,7 @@
                 <div class="col-md-6 mb-3">
                     <strong>Perfil:</strong>
                     <p>
-                        <span class="badge bg-<?= $user['User']['role'] === 'admin' ? 'danger' : 'info' ?>">
+                        <span class="badge bg-<?= $user['User']['role'] === 'admin' ? 'danger' : 'success' ?>">
                             <?php echo h($user['User']['role']); ?>
                         </span>
                     </p>
