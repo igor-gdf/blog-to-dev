@@ -14,10 +14,10 @@
         <input type="hidden" name="data[Post][status]" value="published" id="post-status">
         
         <div class="d-flex gap-2">
-            <button type="submit" class="btn btn-success" data-status="published">
+            <button type="submit" class="btn btn-dark" data-status="published">
                 <i class="bi bi-send"></i> Publicar Post
             </button>
-            <button type="submit" class="btn btn-secondary" data-status="draft">
+            <button type="submit" class="btn btn-outline-dark" data-status="draft">
                 <i class="bi bi-save"></i> Salvar como Rascunho
             </button>
             <?= $this->Html->link('Cancelar', ['action' => 'dashboard'], ['class' => 'btn btn-outline-secondary']) ?>
