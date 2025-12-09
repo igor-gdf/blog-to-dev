@@ -40,13 +40,13 @@
             <div class="d-flex gap-2">
                 <?php echo $this->Form->button('Salvar Alterações', [
                     'type' => 'submit',
-                    'class' => 'btn btn-primary'
+                    'class' => 'btn btn-dark'
                 ]); ?>
                 
                 <?php echo $this->Html->link('Cancelar', [
                     'action' => 'profile'
                 ], [
-                    'class' => 'btn btn-secondary'
+                    'class' => 'btn btn-outline-dark'
                 ]); ?>
             </div>
 
