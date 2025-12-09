@@ -23,7 +23,7 @@
                 <form action="<?= $this->Html->url(array('controller' => 'posts', 'action' => 'edit', $post['Post']['id'])) ?>"
                     method="post">
                     <input type="hidden" name="data[Post][status]" value="draft">
-                    <button type="submit" class="btn btn-secondary">Tornar rascunho</button>
+                    <button type="submit" class="btn btn-outline-dark">Tornar rascunho</button>
                 </form>
             <?php endif; ?>
         </div>
