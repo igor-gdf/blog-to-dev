@@ -13,7 +13,7 @@
         
         <div class="mb-3">
             <label class="form-label">Status Atual:</label>
-            <span class="badge bg-<?= $post['Post']['status'] === 'published' ? 'success' : 'secondary' ?>">
+            <span class="badge bg-<?= $post['Post']['status'] === 'published' ? 'success' : 'warning' ?>">
                 <?= $post['Post']['status'] === 'published' ? 'Publicado' : 'Rascunho' ?>
             </span>
         </div>
@@ -21,10 +21,10 @@
         <input type="hidden" name="data[Post][status]" value="<?= h($post['Post']['status']) ?>" id="post-status">
         
         <div class="d-flex gap-2">
-            <button type="submit" class="btn btn-success" data-status="published">
+            <button type="submit" class="btn btn-dark" data-status="published">
                 <i class="bi bi-send"></i> Publicar
             </button>
-            <button type="submit" class="btn btn-secondary" data-status="draft">
+            <button type="submit" class="btn btn-outline-dark" data-status="draft">
                 <i class="bi bi-save"></i> Salvar como Rascunho
             </button>
             <?= $this->Html->link('Cancelar', ['action' => 'view', $post['Post']['id']], ['class' => 'btn btn-outline-secondary']) ?>
