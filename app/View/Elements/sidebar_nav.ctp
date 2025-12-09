@@ -116,7 +116,7 @@
                         <?php echo $this->Html->link(
                             $this->Html->image('users.svg', ['alt' => 'Usuários', 'class' => 'me-1 mb-1']) . '',
                             ['controller' => 'users', 'action' => 'admin_index'],
-                            ['class' => 'nav-link text-warning px-2', 'escape' => false]
+                            ['class' => 'nav-link text-white px-2', 'escape' => false]
                         ); ?>
                     </li>
                     <li class="nav-item">
