@@ -290,7 +290,6 @@ class UsersController extends AppController
         }
 
         if ($this->request->is('post')) {
-            // Soft delete
             if ($this->User->softDelete($id)) {
                 $this->Flash->success('Sua conta foi excluída com sucesso.');
                 return $this->redirect($this->Auth->logout());
