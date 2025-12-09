@@ -45,13 +45,13 @@
     <div class="d-flex gap-2">
         <?php echo $this->Form->button('Criar Usuário', [
             'type' => 'submit',
-            'class' => 'btn btn-primary'
+            'class' => 'btn btn-dark'
         ]); ?>
         
         <?php echo $this->Html->link('Cancelar', [
             'action' => 'admin_index'
         ], [
-            'class' => 'btn btn-secondary'
+            'class' => 'btn btn-outline-dark'
         ]); ?>
     </div>
     
