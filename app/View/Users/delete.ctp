@@ -1,4 +1,4 @@
-<div class="p-4">
+
     <div class="card border-danger">
         <div class="card-header bg-danger text-white">
             <h3 class="mb-0">Confirmar Exclusão de Conta</h3>
@@ -32,4 +32,3 @@
             <?php echo $this->Form->end(); ?>
         </div>
     </div>
-</div>

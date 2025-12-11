@@ -1,4 +1,4 @@
-<div class="p-4">
+
     <h2>Editar Usuário</h2>
 
     <div class="card">
@@ -65,4 +65,3 @@
             <?php echo $this->Form->end(); ?>
         </div>
     </div>
-</div>
