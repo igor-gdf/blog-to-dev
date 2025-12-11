@@ -37,6 +37,12 @@ class PagesController extends AppController {
  */
 	public $uses = array();
 
+	public function beforeFilter() {
+		parent::beforeFilter();
+		// Permite acesso deslogado à landing page (home)
+		$this->Auth->allow('display');
+	}
+
 /**
  * Displays a view
  *
