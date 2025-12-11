@@ -1,4 +1,4 @@
-<div class="overflow-auto row g-3" style="max-height: 83vh;">
+<div class="overflow-a row g-3" style="max-height: 83vh;">
     <h1><?php echo h($post['Post']['title']); ?></h1>
     <p><?= h($post['Post']['content']); ?></p>
     <p><small class="text-muted">Autor: <?= h($post['User']['username']) ?></small></p>
@@ -23,7 +23,7 @@
                 <form action="<?= $this->Html->url(array('controller' => 'posts', 'action' => 'edit', $post['Post']['id'])) ?>"
                     method="post">
                     <input type="hidden" name="data[Post][status]" value="draft">
-                    <button type="submit" class="btn btn-outline-dark">Tornar rascunho</button>
+                    <button type="submit" class="btn btn-secondary">Tornar rascunho</button>
                 </form>
             <?php endif; ?>
         </div>

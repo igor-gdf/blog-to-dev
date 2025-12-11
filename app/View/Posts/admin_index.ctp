@@ -7,7 +7,7 @@
     <button type="submit" class="btn btn-dark">Filtrar</button>
 </form>
 
-<div class="overflow-auto row g-3" style="max-height: 60vh;">
+<div class="row g-3" style="max-height: 60vh;">
     <?php foreach ($allPosts as $post): ?>
         <div class="col-12 col-sm-6 col-md-4">
             <div class="card h-100 shadow-sm">

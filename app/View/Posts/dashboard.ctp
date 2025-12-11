@@ -1,7 +1,7 @@
 <!-- Cabeçalho -->
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h2 class="mb-0">Meu Dashboard</h2>
-    <?= $this->Html->link('+ Criar Post', ['action' => 'add'], ['class' => 'btn btn-dark']) ?>
+    <?= $this->Html->link('Criar Post', ['action' => 'add'], ['class' => 'btn btn-dark']) ?>
 </div>
 
 <!-- Cards de Estatísticas -->

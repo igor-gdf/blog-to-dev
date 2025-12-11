@@ -45,7 +45,7 @@
         <h1 class="h3 mb-0">Posts</h1>
     </div>
 
-    <div class="overflow-auto row g-3" style="max-height: 55vh;">
+    <div class="row g-3" style="max-height: 55vh;">
         <?php foreach ($posts as $post): ?>
             <div class="col-12 col-sm-6 col-md-4">
                 <div class="card h-100 shadow-sm">
