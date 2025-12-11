@@ -1,230 +1,424 @@
 <?php
 /**
- * @link          https://cakephp.org CakePHP(tm) Project
- * @package       app.View.Pages
- * @since         CakePHP(tm) v 0.10.0.1076
+ * Página Landing - Blog to Dev
+ * Standalone marketing page apresentando a plataforma
+ * Sem integração com sistema de autenticação
  */
-
-if (!Configure::read('debug')):
-	throw new NotFoundException();
-endif;
-
-App::uses('Debugger', 'Utility');
-?>
-<h2><?php echo __d('cake_dev', 'Release Notes for CakePHP %s.', Configure::version()); ?></h2>
-<p>
-	<?php echo $this->Html->link(__d('cake_dev', 'Read the changelog'), 'https://cakephp.org/changelogs/' . Configure::version()); ?>
-</p>
-<?php
-if (Configure::read('debug') > 0):
-	Debugger::checkSecurityKeys();
-endif;
-?>
-<?php if (file_exists(WWW_ROOT . 'css' . DS . 'cake.generic.css')): ?>
-	<p id="url-rewriting-warning" style="background-color:#e32; color:#fff;">
-		<?php echo __d('cake_dev', 'URL rewriting is not properly configured on your server.'); ?>
-		1) <a target="_blank" href="https://book.cakephp.org/2.0/en/installation/url-rewriting.html" style="color:#fff;">Help me configure it</a>
-		2) <a target="_blank" href="https://book.cakephp.org/2.0/en/development/configuration.html#cakephp-core-configuration" style="color:#fff;">I don't / can't use URL rewriting</a>
-	</p>
-<?php endif; ?>
-<p>
-<?php
-if (version_compare(PHP_VERSION, '5.2.8', '>=')):
-	echo '<span class="notice success">';
-		echo __d('cake_dev', 'Your version of PHP is 5.2.8 or higher.');
-	echo '</span>';
-else:
-	echo '<span class="notice">';
-		echo __d('cake_dev', 'Your version of PHP is too low. You need PHP 5.2.8 or higher to use CakePHP.');
-	echo '</span>';
-endif;
-?>
-</p>
-<p>
-	<?php
-	if (is_writable(TMP)):
-		echo '<span class="notice success">';
-			echo __d('cake_dev', 'Your tmp directory is writable.');
-		echo '</span>';
-	else:
-		echo '<span class="notice">';
-			echo __d('cake_dev', 'Your tmp directory is NOT writable.');
-		echo '</span>';
-	endif;
-	?>
-</p>
-<p>
-	<?php
-	$settings = Cache::settings();
-	if (!empty($settings)):
-		echo '<span class="notice success">';
-			echo __d('cake_dev', 'The %s is being used for core caching. To change the config edit %s', '<em>' . $settings['engine'] . 'Engine</em>', CONFIG . 'core.php');
-		echo '</span>';
-	else:
-		echo '<span class="notice">';
-			echo __d('cake_dev', 'Your cache is NOT working. Please check the settings in %s', CONFIG . 'core.php');
-		echo '</span>';
-	endif;
-	?>
-</p>
-<p>
-	<?php
-	$filePresent = null;
-	if (file_exists(CONFIG . 'database.php')):
-		echo '<span class="notice success">';
-			echo __d('cake_dev', 'Your database configuration file is present.');
-			$filePresent = true;
-		echo '</span>';
-	else:
-		echo '<span class="notice">';
-			echo __d('cake_dev', 'Your database configuration file is NOT present.');
-			echo '<br/>';
-			echo __d('cake_dev', 'Rename %s to %s', CONFIG . 'database.php.default', CONFIG . 'database.php');
-		echo '</span>';
-	endif;
-	?>
-</p>
-<?php
-if (isset($filePresent)):
-	App::uses('ConnectionManager', 'Model');
-	try {
-		$connected = ConnectionManager::getDataSource('default');
-	} catch (Exception $connectionError) {
-		$connected = false;
-		$errorMsg = $connectionError->getMessage();
-		if (method_exists($connectionError, 'getAttributes')):
-			$attributes = $connectionError->getAttributes();
-			if (isset($attributes['message'])):
-				$errorMsg .= '<br />' . $attributes['message'];
-			endif;
-		endif;
-	}
-	?>
-	<p>
-		<?php
-			if ($connected && $connected->isConnected()):
-				echo '<span class="notice success">';
-					echo __d('cake_dev', 'CakePHP is able to connect to the database.');
-				echo '</span>';
-			else:
-				echo '<span class="notice">';
-					echo __d('cake_dev', 'CakePHP is NOT able to connect to the database.');
-					echo '<br /><br />';
-					echo $errorMsg;
-				echo '</span>';
-			endif;
-		?>
-	</p>
-<?php
-endif;
-
-App::uses('Validation', 'Utility');
-if (!Validation::alphaNumeric('cakephp')):
-	echo '<p><span class="notice">';
-		echo __d('cake_dev', 'PCRE has not been compiled with Unicode support.');
-		echo '<br/>';
-		echo __d('cake_dev', 'Recompile PCRE with Unicode support by adding <code>--enable-unicode-properties</code> when configuring');
-	echo '</span></p>';
-endif;
+$this->layout = 'landing';
 ?>
 
-<p>
-	<?php
-	if (CakePlugin::loaded('DebugKit')):
-		echo '<span class="notice success">';
-			echo __d('cake_dev', 'DebugKit plugin is present');
-		echo '</span>';
-	else:
-		echo '<span class="notice">';
-			echo __d('cake_dev', 'DebugKit is not installed. It will help you inspect and debug different aspects of your application.');
-			echo '<br/>';
-			echo __d('cake_dev', 'You can install it from %s', $this->Html->link('GitHub', 'https://github.com/cakephp/debug_kit/tree/2.2'));
-		echo '</span>';
-	endif;
-	?>
-</p>
+<style>
+    body {
+        background-color: #fff;
+    }
+    
+    .hero-section {
+        background: linear-gradient(135deg, #000 0%, #1a1a1a 100%);
+        color: white;
+        padding: 80px 0;
+        margin-bottom: 60px;
+    }
+    
+    .hero-section h1 {
+        font-size: 3.5rem;
+        font-weight: 900;
+        letter-spacing: -1px;
+        background: linear-gradient(90deg, #fff 0%, #ccc 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 24px;
+    }
+    
+    .hero-section .lead {
+        font-size: 1.25rem;
+        line-height: 1.8;
+        opacity: 0.95;
+    }
+    
+    .btn-light {
+        background-color: #fff;
+        color: #000;
+        font-weight: 600;
+        padding: 12px 24px;
+        border: none;
+    }
+    
+    .btn-light:hover {
+        background-color: #f0f0f0;
+        color: #000;
+    }
+    
+    .btn-outline-light {
+        border: 2px solid #fff;
+        color: #fff;
+        font-weight: 600;
+        padding: 10px 22px;
+        background: transparent;
+    }
+    
+    .btn-outline-light:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+        border-color: #fff;
+        color: #fff;
+    }
+    
+    .card-hover {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .card-hover:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15) !important;
+    }
+    
+    .feature-icon {
+        width: 60px;
+        height: 60px;
+        background: linear-gradient(135deg, #000 0%, #333 100%);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 28px;
+        margin-bottom: 12px;
+    }
+    
+    .step-number {
+        width: 50px;
+        height: 50px;
+        background: linear-gradient(135deg, #000 0%, #333 100%);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: bold;
+        font-size: 20px;
+    }
+    
+    .tech-badge {
+        display: inline-block;
+        background: #000;
+        color: #fff;
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 500;
+        margin: 4px 4px 4px 0;
+    }
+    
+    .section-divider {
+        height: 2px;
+        background: linear-gradient(90deg, #000 0%, #ccc 50%, transparent 100%);
+        margin: 60px 0;
+    }
+    
+    .btn-dark {
+        background-color: #000;
+        color: #fff;
+        font-weight: 600;
+    }
+    
+    .btn-dark:hover {
+        background-color: #333;
+        color: #fff;
+    }
+    
+    .btn-outline-dark {
+        border: 2px solid #000;
+        color: #000;
+        font-weight: 600;
+        background: transparent;
+    }
+    
+    .btn-outline-dark:hover {
+        background-color: #000;
+        color: #fff;
+        border-color: #000;
+    }
+</style>
 
-<h3><?php echo __d('cake_dev', 'Editing this Page'); ?></h3>
-<p>
-<?php
-echo __d('cake_dev', 'To change the content of this page, edit: %s.<br />
-To change its layout, edit: %s.<br />
-You can also add some CSS styles for your pages at: %s.',
-	'APP/View/Pages/home.ctp', 'APP/View/Layouts/default.ctp', 'APP/webroot/css');
-?>
-</p>
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container-lg">
+        <div class="row align-items-center">
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <h1>Blog to Dev</h1>
+                <p class="lead mb-4">
+                    Uma plataforma moderna para compartilhar conhecimento técnico. 
+                    Explore posts, publique suas ideias e conecte com a comunidade.
+                </p>
+                <div class="d-flex flex-wrap gap-3">
+                    <a href="/posts" class="btn btn-light">→ Explorar Posts</a>
+                    <a href="/users/register" class="btn btn-outline-light">↳ Cadastrar</a>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="bg-white p-5 rounded-3 shadow-lg">
+                    <div class="text-center mb-4">
+                        <div style="font-size: 48px; margin-bottom: 16px;">💻</div>
+                        <h3 class="text-dark mb-3 fw-bold">Desenvolvimento Prático</h3>
+                        <p class="text-muted small">
+                            Conteúdo focado em soluções reais, boas práticas e arquitetura moderna.
+                        </p>
+                    </div>
+                    <div class="d-flex justify-content-center gap-2 flex-wrap">
+                        <span class="tech-badge">CakePHP</span>
+                        <span class="tech-badge">PHP 7.4</span>
+                        <span class="tech-badge">PostgreSQL</span>
+                        <span class="tech-badge">Docker</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
-<h3><?php echo __d('cake_dev', 'Getting Started'); ?></h3>
-<p>
-	<?php
-	echo $this->Html->link(
-		sprintf('<strong>%s</strong> %s', __d('cake_dev', 'New'), __d('cake_dev', 'CakePHP 2.0 Docs')),
-		'https://book.cakephp.org/2.0/en/',
-		array('target' => '_blank', 'escape' => false)
-	);
-	?>
-</p>
-<p>
-	<?php
-	echo $this->Html->link(
-		__d('cake_dev', 'The 15 min Blog Tutorial'),
-		'https://book.cakephp.org/2.0/en/tutorials-and-examples/blog/blog.html',
-		array('target' => '_blank', 'escape' => false)
-	);
-	?>
-</p>
+<div class="section-divider"></div>
 
-<h3><?php echo __d('cake_dev', 'Official Plugins'); ?></h3>
-<p>
-<ul>
-	<li>
-		<?php echo $this->Html->link('DebugKit', 'https://github.com/cakephp/debug_kit/tree/2.2') ?>:
-		<?php echo __d('cake_dev', 'provides a debugging toolbar and enhanced debugging tools for CakePHP applications.'); ?>
-	</li>
-	<li>
-		<?php echo $this->Html->link('Localized', 'https://github.com/cakephp/localized') ?>:
-		<?php echo __d('cake_dev', 'contains various localized validation classes and translations for specific countries'); ?>
-	</li>
-</ul>
-</p>
+<!-- Features Section -->
+<section id="features" class="py-5">
+    <div class="container-lg">
+        <h2 class="h4 mb-5 text-center fw-bold">Recursos Principais</h2>
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-3">
+                <div class="card card-hover border-0 shadow-sm h-100">
+                    <div class="card-body text-center">
+                        <div class="feature-icon mx-auto">📝</div>
+                        <h5 class="card-title fw-bold">Publicar Posts</h5>
+                        <p class="card-text text-muted small">
+                            Compartilhe seus conhecimentos como rascunho ou publicado para a comunidade.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="card card-hover border-0 shadow-sm h-100">
+                    <div class="card-body text-center">
+                        <div class="feature-icon mx-auto">🔍</div>
+                        <h5 class="card-title fw-bold">Busca Avançada</h5>
+                        <p class="card-text text-muted small">
+                            Filtre posts por título, conteúdo, autor e período para encontrar exatamente o que procura.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="card card-hover border-0 shadow-sm h-100">
+                    <div class="card-body text-center">
+                        <div class="feature-icon mx-auto">🔐</div>
+                        <h5 class="card-title fw-bold">Seguro</h5>
+                        <p class="card-text text-muted small">
+                            Autenticação robusta, controle de acesso granular e proteção de dados.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="card card-hover border-0 shadow-sm h-100">
+                    <div class="card-body text-center">
+                        <div class="feature-icon mx-auto">👥</div>
+                        <h5 class="card-title fw-bold">Comunidade</h5>
+                        <p class="card-text text-muted small">
+                            Conecte-se com desenvolvedores, arquitetos e entusiastas de tecnologia.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
-<h3><?php echo __d('cake_dev', 'More about CakePHP'); ?></h3>
-<p>
-<?php echo __d('cake_dev', 'CakePHP is a rapid development framework for PHP which uses commonly known design patterns like Active Record, Association Data Mapping, Front Controller and MVC.'); ?>
-</p>
-<p>
-<?php echo __d('cake_dev', 'Our primary goal is to provide a structured framework that enables PHP users at all levels to rapidly develop robust web applications, without any loss to flexibility.'); ?>
-</p>
+<div class="section-divider"></div>
 
-<ul>
-	<li><a href="https://cakephp.org">CakePHP</a>
-	<ul><li><?php echo __d('cake_dev', 'The Rapid Development Framework'); ?></li></ul></li>
-	<li><a href="https://book.cakephp.org"><?php echo __d('cake_dev', 'CakePHP Documentation'); ?> </a>
-	<ul><li><?php echo __d('cake_dev', 'Your Rapid Development Cookbook'); ?></li></ul></li>
-	<li><a href="https://api.cakephp.org"><?php echo __d('cake_dev', 'CakePHP API'); ?> </a>
-	<ul><li><?php echo __d('cake_dev', 'Quick API Reference'); ?></li></ul></li>
-	<li><a href="https://bakery.cakephp.org"><?php echo __d('cake_dev', 'The Bakery'); ?> </a>
-	<ul><li><?php echo __d('cake_dev', 'Everything CakePHP'); ?></li></ul></li>
-	<li><a href="https://plugins.cakephp.org"><?php echo __d('cake_dev', 'CakePHP Plugins'); ?> </a>
-	<ul><li><?php echo __d('cake_dev', 'A comprehensive list of all CakePHP plugins created by the community'); ?></li></ul></li>
-	<li><a href="https://community.cakephp.org"><?php echo __d('cake_dev', 'CakePHP Community Center'); ?> </a>
-	<ul><li><?php echo __d('cake_dev', 'Everything related to the CakePHP community in one place'); ?></li></ul></li>
-	<li><a href="http://discourse.cakephp.org/">CakePHP Official Forum </a>
-	<ul><li>CakePHP discussion forum</li></ul></li>
-	<li><a href="http://discourse.cakephp.org/"><?php echo __d('cake_dev', 'CakePHP Official Forum'); ?> </a>
-	<ul><li><?php echo __d('cake_dev', 'CakePHP discussion forum'); ?></li></ul></li>
-	<li><a href="irc://irc.freenode.net/cakephp">irc.freenode.net #cakephp</a>
-	<ul><li><?php echo __d('cake_dev', 'Live chat about CakePHP'); ?></li></ul></li>
-	<li><a href="https://github.com/cakephp/"><?php echo __d('cake_dev', 'CakePHP Code'); ?> </a>
-	<ul><li><?php echo __d('cake_dev', 'Find the CakePHP code on GitHub and contribute to the framework'); ?></li></ul></li>
-	<li><a href="https://github.com/cakephp/cakephp/issues"><?php echo __d('cake_dev', 'CakePHP Issues'); ?> </a>
-	<ul><li><?php echo __d('cake_dev', 'CakePHP Issues'); ?></li></ul></li>
-	<li><a href="https://github.com/cakephp/cakephp/wiki#roadmaps"><?php echo __d('cake_dev', 'CakePHP Roadmaps'); ?> </a>
-	<ul><li><?php echo __d('cake_dev', 'CakePHP Roadmaps'); ?></li></ul></li>
-	<li><a href="https://training.cakephp.org"><?php echo __d('cake_dev', 'Training'); ?> </a>
-	<ul><li><?php echo __d('cake_dev', 'Join a live session and get skilled with the framework'); ?></li></ul></li>
-	<li><a href="https://cakefest.org"><?php echo __d('cake_dev', 'CakeFest'); ?> </a>
-	<ul><li><?php echo __d('cake_dev', 'Don\'t miss our annual CakePHP conference'); ?></li></ul></li>
-	<li><a href="https://cakefoundation.org"><?php echo __d('cake_dev', 'Cake Software Foundation'); ?> </a>
-	<ul><li><?php echo __d('cake_dev', 'Promoting development related to CakePHP'); ?></li></ul></li>
-</ul>
+<!-- Technology Stack -->
+<section class="py-5 bg-light rounded-3">
+    <div class="container-lg">
+        <h2 class="h4 mb-5 text-center fw-bold">Stack Tecnológico</h2>
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-3">
+                <div class="card card-hover border-0 h-100">
+                    <div class="card-body">
+                        <h6 class="card-title fw-bold mb-3">🔧 Backend</h6>
+                        <ul class="list-unstyled small text-muted">
+                            <li>✓ CakePHP 2.x</li>
+                            <li>✓ PHP 7.4</li>
+                            <li>✓ PostgreSQL 12</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="card card-hover border-0 h-100">
+                    <div class="card-body">
+                        <h6 class="card-title fw-bold mb-3">🎨 Frontend</h6>
+                        <ul class="list-unstyled small text-muted">
+                            <li>✓ Bootstrap 5.3</li>
+                            <li>✓ jQuery 3.6</li>
+                            <li>✓ HTML5 / CSS3</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="card card-hover border-0 h-100">
+                    <div class="card-body">
+                        <h6 class="card-title fw-bold mb-3">🚀 Infraestrutura</h6>
+                        <ul class="list-unstyled small text-muted">
+                            <li>✓ Docker</li>
+                            <li>✓ Docker Compose</li>
+                            <li>✓ Apache HTTP</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="card card-hover border-0 h-100">
+                    <div class="card-body">
+                        <h6 class="card-title fw-bold mb-3">🛡️ Segurança</h6>
+                        <ul class="list-unstyled small text-muted">
+                            <li>✓ Autenticação Blowfish</li>
+                            <li>✓ Controle de acesso</li>
+                            <li>✓ Soft delete</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- Why Choose Section -->
+<section class="py-5">
+    <div class="container-lg">
+        <h2 class="h4 mb-5 text-center fw-bold">Por que Blog to Dev?</h2>
+        <div class="row g-5">
+            <div class="col-md-6">
+                <div class="d-flex mb-4">
+                    <div class="me-3" style="flex-shrink: 0;">
+                        <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #000 0%, #333 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">✓</div>
+                    </div>
+                    <div>
+                        <h5 class="fw-bold mb-2">Comunidade Ativa</h5>
+                        <p class="text-muted small">Conecte-se com desenvolvedores, arquitetos e entusiastas de tecnologia do Brasil e mundo.</p>
+                    </div>
+                </div>
+                <div class="d-flex mb-4">
+                    <div class="me-3" style="flex-shrink: 0;">
+                        <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #000 0%, #333 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">✓</div>
+                    </div>
+                    <div>
+                        <h5 class="fw-bold mb-2">Conteúdo de Qualidade</h5>
+                        <p class="text-muted small">Posts aprofundados sobre desenvolvimento, DevOps, arquitetura, segurança e inovação.</p>
+                    </div>
+                </div>
+                <div class="d-flex">
+                    <div class="me-3" style="flex-shrink: 0;">
+                        <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #000 0%, #333 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">✓</div>
+                    </div>
+                    <div>
+                        <h5 class="fw-bold mb-2">100% Gratuito</h5>
+                        <p class="text-muted small">Sem custo para ler ou publicar. Compartilhe conhecimento livremente com a comunidade.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="bg-dark p-5 rounded-3 text-white">
+                    <h4 class="mb-3 fw-bold">Estatísticas da Plataforma</h4>
+                    <div class="row g-3 mb-4">
+                        <div class="col-6">
+                            <div class="text-center">
+                                <div style="font-size: 32px; font-weight: bold; color: #fff;">40+</div>
+                                <p class="text-light small mb-0">Posts Publicados</p>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="text-center">
+                                <div style="font-size: 32px; font-weight: bold; color: #fff;">9</div>
+                                <p class="text-light small mb-0">Autores Ativos</p>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-light small mb-0">
+                        A plataforma cresceu rapidamente com conteúdo de qualidade produzido por profissionais experientes.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- Getting Started Section -->
+<section id="getting-started" class="py-5">
+    <div class="container-lg">
+        <h2 class="h4 mb-5 text-center fw-bold">Como Começar</h2>
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-3">
+                <div class="card card-hover border-0 shadow-sm h-100">
+                    <div class="card-body">
+                        <div class="step-number mb-3">1</div>
+                        <h5 class="card-title fw-bold">Explore</h5>
+                        <p class="card-text text-muted small">
+                            Navegue pelos posts publicados e descubra conteúdo técnico relevante.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="card card-hover border-0 shadow-sm h-100">
+                    <div class="card-body">
+                        <div class="step-number mb-3">2</div>
+                        <h5 class="card-title fw-bold">Registre-se</h5>
+                        <p class="card-text text-muted small">
+                            Crie sua conta gratuita em alguns cliques para acessar todos os recursos.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="card card-hover border-0 shadow-sm h-100">
+                    <div class="card-body">
+                        <div class="step-number mb-3">3</div>
+                        <h5 class="card-title fw-bold">Publique</h5>
+                        <p class="card-text text-muted small">
+                            Compartilhe seus posts como rascunho ou publicado para a comunidade.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="card card-hover border-0 shadow-sm h-100">
+                    <div class="card-body">
+                        <div class="step-number mb-3">4</div>
+                        <h5 class="card-title fw-bold">Conecte</h5>
+                        <p class="card-text text-muted small">
+                            Interaja com a comunidade de desenvolvedores e aprenda juntos.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- CTA Section -->
+<section class="py-5 bg-light">
+    <div class="container-lg text-center">
+        <h2 class="h4 mb-4 fw-bold">Pronto para começar?</h2>
+        <p class="lead text-muted mb-4" style="max-width: 600px; margin-left: auto; margin-right: auto;">
+            Junte-se à comunidade de desenvolvedores e comece a compartilhar seu conhecimento com o mundo.
+        </p>
+        <div class="d-flex flex-wrap gap-3 justify-content-center">
+            <a href="/posts" class="btn btn-dark btn-lg">→ Explorar Posts</a>
+            <a href="/users/register" class="btn btn-outline-dark btn-lg">↳ Cadastrar</a>
+        </div>
+    </div>
+</section>
