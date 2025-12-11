@@ -45,7 +45,7 @@
     <div class="d-flex gap-2">
         <?php echo $this->Form->button('Criar Usuário', [
             'type' => 'submit',
-            'class' => 'btn btn-dark'
+            'class' => 'btn btn-success'
         ]); ?>
         
         <?php echo $this->Html->link('Cancelar', [
