@@ -45,7 +45,7 @@
             <?php echo $this->Html->link('Cancelar', [
                 'action' => 'profile'
             ], [
-                'class' => 'btn btn-outline-dark'
+                'class' => 'btn btn-secondary'
             ]); ?>
         </div>
 

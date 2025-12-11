@@ -1,6 +1,6 @@
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h2>Gerenciar Usuários</h2>
-    <?= $this->Html->link('+ Criar Usuário', ['action' => 'admin_add'], ['class' => 'btn btn-dark']) ?>
+    <?= $this->Html->link('Criar Usuário', ['action' => 'admin_add'], ['class' => 'btn btn-dark']) ?>
 </div>
 
 <table class="table table-striped">

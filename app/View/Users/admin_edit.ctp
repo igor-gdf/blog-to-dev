@@ -47,19 +47,8 @@
                 <?php echo $this->Html->link('Cancelar', [
                     'action' => 'admin_index'
                 ], [
-                    'class' => 'btn btn-outline-dark'
+                    'class' => 'btn btn-secondary'
                 ]); ?>
-                
-                <?php if ($user['User']['role'] !== 'admin'): ?>
-                    <?php echo $this->Form->postLink(
-                        'Excluir Usuário',
-                        ['action' => 'admin_delete', $user['User']['id']],
-                        [
-                            'confirm' => 'Tem certeza que deseja excluir este usuário?',
-                            'class' => 'btn btn-danger ms-auto'
-                        ]
-                    ); ?>
-                <?php endif; ?>
             </div>
 
             <?php echo $this->Form->end(); ?>
