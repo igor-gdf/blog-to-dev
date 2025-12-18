@@ -25,40 +25,60 @@ class PostsController extends AppController
     // ======================================================
     public function index()
     {
+        // Limpar filtros
+        if (isset($this->request->query['clear']) && $this->request->query['clear'] == 1) {
+            $this->Session->delete('Post.filters');
+            return $this->redirect(['action' => 'index']);
+        }
+
+        // Processar filtros apenas via POST
+        if ($this->request->is('post')) {
+            $filters = [
+                'search' => isset($this->request->data['search']) ? trim(strtolower($this->request->data['search'])) : '',
+                'created_from' => isset($this->request->data['created_from']) ? $this->_formatDate($this->request->data['created_from']) : '',
+                'created_to' => isset($this->request->data['created_to']) ? $this->_formatDate($this->request->data['created_to']) : ''
+            ];
+            $this->Session->write('Post.filters', $filters);
+            return $this->redirect(['action' => 'index']);
+        }
+
+        // Recuperar filtros da sessão
+        $filters = $this->Session->read('Post.filters');
+        if (!is_array($filters)) {
+            $filters = ['search' => '', 'created_from' => '', 'created_to' => ''];
+        }
+
         $conditions = [
             'Post.status' => 'published',
             'Post.deleted_at' => null
         ];
 
-        // Filtro por texto
-        $search = isset($this->request->query['search']) ? trim(strtolower($this->request->query['search'])) : '';
-        if ($search !== '') {
+        // Aplicar filtro por texto
+        if (!empty($filters['search'])) {
             $conditions['OR'] = [
-                'LOWER(Post.title) LIKE' => "%{$search}%",
-                'LOWER(Post.content) LIKE' => "%{$search}%",
-                'LOWER(User.username) LIKE' => "%{$search}%"
+                'LOWER(Post.title) LIKE' => "%{$filters['search']}%",
+                'LOWER(Post.content) LIKE' => "%{$filters['search']}%",
+                'LOWER(User.username) LIKE' => "%{$filters['search']}%"
             ];
         }
 
-
-        // Filtro por datas
-        if (!empty($this->request->query('created_from'))) {
-            $conditions['Post.created >='] = $this->request->query('created_from') . ' 00:00:00';
+        // Aplicar filtro por datas
+        if (!empty($filters['created_from'])) {
+            $conditions['Post.created >='] = $filters['created_from'] . ' 00:00:00';
         }
-        if (!empty($this->request->query('created_to'))) {
-            $conditions['Post.created <='] = $this->request->query('created_to') . ' 23:59:59';
+        if (!empty($filters['created_to'])) {
+            $conditions['Post.created <='] = $filters['created_to'] . ' 23:59:59';
         }
 
         // Paginação
         $this->Paginator->settings = [
             'conditions' => $conditions,
             'limit' => 10,
-            'order' => ['Post.created' => 'desc'],
-            'paramType' => 'querystring'
+            'order' => ['Post.created' => 'desc']
         ];
 
         $posts = $this->Paginator->paginate('Post');
-        $this->set(compact('posts'));
+        $this->set(compact('posts', 'filters'));
     }
 
     // ======================================================
@@ -152,13 +172,28 @@ class PostsController extends AppController
     public function dashboard()
     {
         $userId = $this->Auth->user('id');
+        $filterStatus = $this->Session->read('Post.dashboard.status');
+
+        // Processar filtro apenas via POST
+        if ($this->request->is('post')) {
+            $filterStatus = isset($this->request->data['status']) ? $this->request->data['status'] : '';
+            $this->Session->write('Post.dashboard.status', $filterStatus);
+            return $this->redirect(['action' => 'dashboard']);
+        }
+
+        // Limpar filtro
+        if (isset($this->request->query['clear']) && $this->request->query['clear'] == 1) {
+            $this->Session->delete('Post.dashboard.status');
+            return $this->redirect(['action' => 'dashboard']);
+        }
+
         $conditions = [
             'Post.user_id' => $userId,
             'Post.deleted_at' => null
         ];
 
-        if (!empty($this->request->query['status'])) {
-            $conditions['Post.status'] = $this->request->query['status'];
+        if (!empty($filterStatus)) {
+            $conditions['Post.status'] = $filterStatus;
         }
 
         $myPosts = $this->Post->find('all', [
@@ -194,9 +229,24 @@ class PostsController extends AppController
     public function admin_index()
     {
         $this->_checkAdmin();
+        $filterStatus = $this->Session->read('Post.admin.status');
+
+        // Processar filtro apenas via POST
+        if ($this->request->is('post')) {
+            $filterStatus = isset($this->request->data['status']) ? $this->request->data['status'] : '';
+            $this->Session->write('Post.admin.status', $filterStatus);
+            return $this->redirect(['action' => 'admin_index']);
+        }
+
+        // Limpar filtro
+        if (isset($this->request->query['clear']) && $this->request->query['clear'] == 1) {
+            $this->Session->delete('Post.admin.status');
+            return $this->redirect(['action' => 'admin_index']);
+        }
+
         $conditions = ['Post.deleted_at' => null];
-        if (!empty($this->request->query['status'])) {
-            $conditions['Post.status'] = $this->request->query['status'];
+        if (!empty($filterStatus)) {
+            $conditions['Post.status'] = $filterStatus;
         }
 
         $posts = $this->Post->find('all', [
@@ -240,6 +290,29 @@ class PostsController extends AppController
         $this->Flash->error(__('Você não tem permissão para realizar esta ação.'));
         $this->redirect(['action' => 'index']);
         return false;
+    }
+
+    /**
+     * Formata data para o padrão YYYY-MM-DD
+     * Aceita formatos: DD/MM/YYYY, DD-MM-YYYY, YYYY-MM-DD
+     */
+    private function _formatDate($date)
+    {
+        if (empty($date)) {
+            return '';
+        }
+
+        // Se já está no formato YYYY-MM-DD
+        if (preg_match('/^\d{4}-\d{2}-\d{2}$/', $date)) {
+            return $date;
+        }
+
+        // Tenta converter de DD/MM/YYYY ou DD-MM-YYYY
+        if (preg_match('/^(\d{2})[\/\-](\d{2})[\/\-](\d{4})$/', $date, $matches)) {
+            return $matches[3] . '-' . $matches[2] . '-' . $matches[1];
+        }
+
+        return '';
     }
 }
 

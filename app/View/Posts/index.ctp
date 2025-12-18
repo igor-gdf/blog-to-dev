@@ -1,25 +1,26 @@
 <div class="search-form ">
     <?php
     echo $this->Form->create('Post', array(
-        'type' => 'get',
+        'type' => 'post',
         'class' => 'd-flex mb-3 gap-3',
         'url' => array('action' => 'index')
     ));
-
-    echo $this->Form->input('search', array(
-        'label' => false,
-        'div' => false,
-        'class' => 'form-control',
-        'placeholder' => 'Buscar...',
-        'value' => isset($this->request->query['search']) ? $this->request->query['search'] : ''
-    ));
     ?>
+    <input
+            type="text"
+            name="search"
+            class="form-control"
+            placeholder="Buscar..."
+            value="<?= isset($filters['search']) ? h($filters['search']) : '' ?>"
+        />
     <input
             type="text"
             name="created_from"
             class="form-control"
             placeholder="Data inicial"
-            value="<?= isset($this->request->query['created_from']) ? h($this->request->query['created_from']) : '' ?>"
+                value="<?= !empty($filters['created_from'])
+        ? date('d/m/Y', strtotime($filters['created_from']))
+        : '' ?>"
             onfocus="this.type='date'"
             onblur="if(!this.value)this.type='text'"
         />
@@ -28,7 +29,9 @@
             name="created_to"
             class="form-control"
             placeholder="Data final"
-            value="<?= isset($this->request->query['created_to']) ? h($this->request->query['created_to']) : '' ?>"
+                value="<?= !empty($filters['created_to'])
+        ? date('d/m/Y', strtotime($filters['created_to']))
+        : '' ?>"
             onfocus="this.type='date'"
             onblur="if(!this.value)this.type='text'"
         />
